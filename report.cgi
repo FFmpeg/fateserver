@@ -60,7 +60,7 @@ tag 'link', rel  => 'stylesheet',
             href => 'fate.css';
 print "<title>FATE: $slot $rev</title>\n";
 print <<EOF;
-<script>
+<script type="text/javascript">
   function toggle(id) {
       var e = document.getElementById(id);
       e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row';

@@ -50,7 +50,7 @@ for my $rep (sort { $b cmp $a } @reps) {
     close R;
     start 'tr';
     td $date;
-    td $subarch;
+    td $subarch || $arch;
     td $os;
     td $cc;
     td $rev;

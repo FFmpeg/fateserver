@@ -48,7 +48,7 @@ for my $slot (@slots) {
     start 'td'; start 'a', href => "history.cgi?slot=$slot";
     print $date;
     end 'td';
-    td $subarch;
+    td $subarch || $arch;
     td $os;
     td $cc;
     td $rev;

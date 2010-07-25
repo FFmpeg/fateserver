@@ -32,6 +32,7 @@ th {
 #config td:first-child {
     font-weight: bold;
     padding-right: 3em;
+    vertical-align: top;
 }
 
 .diff {

@@ -78,7 +78,7 @@ end;
 
 start 'table', id => 'tests';
 if ($nfail) {
-    trowh 'Failed tests';
+    trowh "$nfail failed tests";
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
         my $diff = encode_entities decode_base64($$rec[2]), '<>&"';

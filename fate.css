@@ -35,6 +35,10 @@ th {
     vertical-align: top;
 }
 
+#tests th {
+    text-align: left;
+}
+
 .diff {
     font-family: monospace;
     white-space: pre;

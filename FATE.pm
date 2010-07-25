@@ -8,7 +8,7 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT);
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
-    @EXPORT  = qw/doctype start end tag h1 trow trowa trowh td fail/;
+    @EXPORT  = qw/doctype start end tag h1 trow trowa trowh th td fail/;
 }
 
 # HTML helpers
@@ -80,6 +80,13 @@ sub trowa {
     print "<td>$_</td>" for @_;
     end;
     print "\n";
+}
+
+sub th {
+    my ($text, %attrs) = @_;
+    start 'th', %attrs;
+    print $text;
+    end;
 }
 
 sub td {

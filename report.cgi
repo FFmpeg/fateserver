@@ -94,6 +94,17 @@ trow 'Configuration', $config;
 trow 'Revision',      $rev;
 trow 'Date',          $date;
 trow 'Status',        $err? $errstr : "$npass / $ntest";
+start 'tr';
+td 'Logs';
+start 'td';
+for my $log ('configure', 'compile', 'test') {
+    start 'a', href => "log.cgi?slot=$slot&amp;time=$date&amp;log=$log";
+    print $log;
+    end 'a';
+    print "\n";
+}
+end 'td';
+end 'tr';
 end;
 
 start 'table', id => 'tests';

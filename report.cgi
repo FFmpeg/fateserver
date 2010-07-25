@@ -65,6 +65,18 @@ print <<EOF;
       var e = document.getElementById(id);
       e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row';
   }
+  function hide(id) {
+      var e = document.getElementById(id);
+      e.style.display = 'none';
+  }
+  function show_diff(name) {
+      hide(name + '-err');
+      toggle(name + '-diff');
+  }
+  function show_err(name) {
+      hide(name + '-diff');
+      toggle(name + '-err');
+  }
 </script>
 EOF
 end 'head';
@@ -86,12 +98,23 @@ end;
 
 start 'table', id => 'tests';
 if ($nfail) {
-    trowh "$nfail failed tests";
+    start 'tr'; th "$nfail failed tests", colspan => 3; end 'tr';
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
+        my $test = $$rec[0];
         my $diff = encode_entities decode_base64($$rec[2]), '<>&"';
-        trowa { class => 'fail', onclick => "toggle('$$rec[0]')" }, $$rec[0];
-        trowa { id => $$rec[0], class => 'diff' }, $diff;
+        my $err  = encode_entities decode_base64($$rec[3]), '<>&"';
+        start 'tr', class => 'fail';
+        td "diff",    class => 'toggle', onclick => "show_diff('$test')";
+        td "stderr",  class => 'toggle', onclick => "show_err('$test')";
+        td $test;
+        end 'tr';
+        start 'tr', id => "$test-diff", class => 'diff';
+        td $diff, colspan => 3;
+        end 'tr';
+        start 'tr', id => "$test-err",  class => 'diff';
+        td $err,  colspan => 3;
+        end 'tr';
     }
 } else {
     trowa { class => 'pass' }, 'All tests successful';

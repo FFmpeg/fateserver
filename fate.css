@@ -43,8 +43,10 @@ th {
     text-align: left;
 }
 
-#tests .fail {
+#tests .toggle {
+    width: 5em;
     cursor: pointer;
+    text-align: center;
 }
 
 .diff {

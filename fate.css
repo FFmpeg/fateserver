@@ -1,0 +1,40 @@
+body {
+    background: white;
+    color: black;
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+th {
+    background: #ccc;
+    border: solid 1px black;
+    border-bottom: solid 2px black;
+    padding: 0.5em;
+}
+
+#index td, #tests td {
+    border: solid 1px black;
+    padding: 0 0.5em;
+}
+
+.fail { background: #e33; }
+.pass { background: #5e5; }
+.warn { background: #ff3; }
+
+#index, #tests {
+    border: solid 2px black;
+    margin-top: 2em;
+}
+
+#config td:first-child {
+    font-weight: bold;
+    padding-right: 3em;
+}
+
+.diff {
+    font-family: monospace;
+    white-space: pre;
+}

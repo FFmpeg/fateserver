@@ -35,11 +35,20 @@ th {
     vertical-align: top;
 }
 
+#tests {
+    width: 100%;
+}
+
 #tests th {
     text-align: left;
+}
+
+#tests .fail {
+    cursor: pointer;
 }
 
 .diff {
     font-family: monospace;
     white-space: pre;
+    display: none;
 }

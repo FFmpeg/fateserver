@@ -59,6 +59,14 @@ tag 'link', rel  => 'stylesheet',
             type => 'text/css',
             href => 'fate.css';
 print "<title>FATE: $slot $rev</title>\n";
+print <<EOF;
+<script>
+  function toggle(id) {
+      var e = document.getElementById(id);
+      e.style.display = e.style.display == 'table-row' ? 'none' : 'table-row';
+  }
+</script>
+EOF
 end 'head';
 
 start 'body';
@@ -82,8 +90,8 @@ if ($nfail) {
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
         my $diff = encode_entities decode_base64($$rec[2]), '<>&"';
-        trowa { class => 'fail' }, $$rec[0];
-        trowa { class => 'diff' }, $diff;
+        trowa { class => 'fail', onclick => "toggle('$$rec[0]')" }, $$rec[0];
+        trowa { id => $$rec[0], class => 'diff' }, $diff;
     }
 } else {
     trowa { class => 'pass' }, 'All tests successful';

@@ -30,7 +30,7 @@ h1 'FATE';
 
 start 'table', id => 'index';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Status', 'Tests';
-for my $slot (@slots) {
+for my $slot (sort @slots) {
     open R, "$fatedir/$slot/latest/report";
     my @header = split /:/, scalar <R>;
     my @config = split /:/, scalar <R>;

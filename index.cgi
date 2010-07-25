@@ -29,7 +29,7 @@ start 'body';
 h1 'FATE';
 
 start 'table', id => 'index';
-trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Status', 'Tests';
+trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $slot (sort @slots) {
     open R, "$fatedir/$slot/latest/report";
     my @header = split /:/, scalar <R>;
@@ -38,6 +38,8 @@ for my $slot (sort @slots) {
     my ($arch, $subarch, $cpu, $os, $cc) = @config[1..5];
     my $ntest;
     my $npass;
+    my $rtext;
+    my $rclass;
     while (<R>) {
         my @rec = split /:/;
         $rec[1] == 0 and $npass++;
@@ -52,10 +54,16 @@ for my $slot (sort @slots) {
     td $os;
     td $cc;
     td $rev;
-    td $errstr, class => $err? 'fail' : 'pass';
-    start 'td', class => $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
+    if ($npass) {
+        $rtext  = "$npass / $ntest";
+        $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
+    } else {
+        $rtext  = $errstr;
+        $rclass = 'fail'
+    }
+    start 'td', class => $rclass;
     start 'a', href => "report.cgi?slot=$slot&time=$date";
-    print "$npass / $ntest";
+    print $rtext;
     end 'a';
     end 'td';
     end 'tr';

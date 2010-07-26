@@ -40,8 +40,8 @@ for my $rep (sort { $b cmp $a } @reps) {
     my @config = split /:/, scalar <R>;
     my ($date, $slot, $rev, $err, $errstr) = @header[2..6];
     my ($arch, $subarch, $cpu, $os, $cc) = @config[1..5];
-    my $ntest;
-    my $npass;
+    my $ntest = 0;
+    my $npass = 0;
     my $rtext;
     my $rclass;
     while (<R>) {

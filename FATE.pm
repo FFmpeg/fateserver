@@ -3,12 +3,14 @@ package FATE;
 use strict;
 use warnings;
 
+use POSIX qw/mktime/;
+
 BEGIN {
     use Exporter;
     our ($VERSION, @ISA, @EXPORT);
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
-    @EXPORT  = qw/split_header split_config split_rec
+    @EXPORT  = qw/split_header split_config split_rec parse_date
                   doctype start end tag h1 trow trowa trowh th td anchor
                   fail/;
 }
@@ -49,6 +51,11 @@ sub split_rec {
         diff   => $rec[2],
         stderr => $rec[3],
     };
+}
+
+sub parse_date {
+    $_[0] =~ /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/ or return undef;
+    mktime $6, $5, $4, $3, $2-1, $1-1900;
 }
 
 # HTML helpers

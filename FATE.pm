@@ -3,14 +3,14 @@ package FATE;
 use strict;
 use warnings;
 
-use POSIX qw/mktime/;
+use POSIX qw/asctime mktime/;
 
 BEGIN {
     use Exporter;
     our ($VERSION, @ISA, @EXPORT);
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
-    @EXPORT  = qw/split_header split_config split_rec parse_date
+    @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   doctype start end tag h1 trow trowa trowh th td anchor
                   fail/;
 }
@@ -56,6 +56,25 @@ sub split_rec {
 sub parse_date {
     $_[0] =~ /^(\d{4})(\d{2})(\d{2})(\d{2})(\d{2})(\d{2})$/ or return undef;
     mktime $6, $5, $4, $3, $2-1, $1-1900;
+}
+
+sub agestr {
+    my ($age, $time) = @_;
+    my $agestr;
+    if ($age <= 0) {
+        $agestr = 'Right now';
+    } elsif ($age < 60) {
+        $agestr = "$age seconds ago";
+    } elsif ($age < 60 * 120) {
+        $agestr = sprintf '%d minutes ago', $age / 60;
+    } elsif ($age < 48 * 3600) {
+        $agestr = sprintf '%d hours ago',   $age / 3600;
+    } elsif ($age < 14 * 86400) {
+        $agestr = sprintf '%d days ago',    $age / 86400;
+    } else {
+        $agestr = asctime gmtime $time;
+    }
+    return $agestr;
 }
 
 # HTML helpers

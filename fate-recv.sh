@@ -7,7 +7,7 @@ die(){
     exit 1
 }
 
-fatedir=/tmp/fate-reports
+test -n "$FATEDIR" || die "FATEDIR not set"
 
 reptmp=$(mktemp -d)
 trap 'rm -r $reptmp' EXIT
@@ -21,7 +21,7 @@ slot=$(expr "$header" : 'fate:0:[0-9]*:\([^:]*\)')
 
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 
-slotdir=$fatedir/$slot
+slotdir=$FATEDIR/$slot
 
 if [ -d "$slotdir" ]; then
     owner=$(cat "$slotdir/owner")

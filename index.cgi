@@ -45,8 +45,8 @@ for my $slot (sort @slots) {
     }
     close R;
     start 'tr';
-    start 'td'; start 'a', href => "history.cgi?slot=$$hdr{slot}";
-    print $$hdr{date};
+    start 'td';
+    anchor $$hdr{date}, href => "history.cgi?slot=$$hdr{slot}";
     end 'td';
     td $$conf{subarch} || $$conf{arch};
     td $$conf{os};
@@ -60,9 +60,7 @@ for my $slot (sort @slots) {
         $rclass = 'fail'
     }
     start 'td', class => $rclass;
-    start 'a', href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
-    print $rtext;
-    end 'a';
+    anchor $rtext, href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
     end 'td';
     end 'tr';
 }

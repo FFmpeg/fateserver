@@ -9,7 +9,8 @@ BEGIN {
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec
-                  doctype start end tag h1 trow trowa trowh th td fail/;
+                  doctype start end tag h1 trow trowa trowh th td anchor
+                  fail/;
 }
 
 # report utils
@@ -131,6 +132,13 @@ sub th {
 sub td {
     my ($text, %attrs) = @_;
     start 'td', %attrs;
+    print $text;
+    end;
+}
+
+sub anchor {
+    my ($text, %attrs) = @_;
+    start 'a', %attrs;
     print $text;
     end;
 }

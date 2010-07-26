@@ -90,9 +90,7 @@ start 'tr';
 td 'Logs';
 start 'td';
 for my $log ('configure', 'compile', 'test') {
-    start 'a', href => "log.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}&amp;log=$log";
-    print $log;
-    end 'a';
+    anchor $log, href => "log.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}&amp;log=$log";
     print "\n";
 }
 end 'td';

@@ -62,9 +62,7 @@ for my $rep (sort { $b cmp $a } @reps) {
         $rclass = 'fail'
     }
     start 'td', class => $rclass;
-    start 'a', href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
-    print $rtext;
-    end 'a';
+    anchor $rtext, href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
     end 'td';
     end 'tr';
 }

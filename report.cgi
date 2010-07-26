@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use POSIX qw/asctime/;
 use CGI qw/param/;
 use HTML::Entities;
 use MIME::Base64;
@@ -84,7 +85,7 @@ trow 'OS',            $$conf{os};
 trow 'Compiler',      $$conf{cc};
 trow 'Configuration', $$conf{config};
 trow 'Revision',      $$hdr{rev};
-trow 'Date',          $$hdr{date};
+trow 'Date',          asctime gmtime parse_date $$hdr{date};
 trow 'Status',        $$hdr{err}? $$hdr{errstr} : "$npass / $ntest";
 start 'tr';
 td 'Logs';

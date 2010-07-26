@@ -44,9 +44,21 @@ for my $slot (sort @slots) {
         $ntest++;
     }
     close R;
-    start 'tr';
+
+    my $time = parse_date $$hdr{date};
+    my $age  = time - $time;
+    my $agestr = agestr $age, $time;
+    my $ageclass;
+
+    if ($age < 3600) {
+        $ageclass = 'recent';
+    } elsif ($age > 3 * 86400) {
+        $ageclass = 'ancient';
+    }
+
+    start 'tr', class => $ageclass;
     start 'td';
-    anchor $$hdr{date}, href => "history.cgi?slot=$$hdr{slot}";
+    anchor $agestr, href => "history.cgi?slot=$$hdr{slot}";
     end 'td';
     td $$conf{subarch} || $$conf{arch};
     td $$conf{os};

@@ -48,8 +48,12 @@ for my $rep (sort { $b cmp $a } @reps) {
         $ntest++;
     }
     close R;
+
+    my $time = parse_date $$hdr{date};
+    my $age  = time - $time;
+
     start 'tr';
-    td $$hdr{date};
+    td agestr $age, $time;
     td $$conf{subarch} || $$conf{arch};
     td $$conf{os};
     td $$conf{cc};

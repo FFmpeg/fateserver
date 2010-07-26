@@ -20,6 +20,9 @@ th {
     padding: 0 0.5em;
 }
 
+.recent  { font-weight: bold; }
+.ancient { color: #888; }
+
 .fail { background: #e44; }
 .pass { background: #5e5; }
 .warn { background: #ff3; }

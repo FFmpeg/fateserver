@@ -73,7 +73,7 @@ sub doctype {
 sub opentag {
     my ($tag, %attrs) = @_;
     print qq{<$tag};
-    print qq{ $_="$attrs{$_}"} for keys %attrs;
+    print qq{ $_="$attrs{$_}"} for grep defined $attrs{$_}, keys %attrs;
 }
 
 sub start {

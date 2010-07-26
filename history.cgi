@@ -36,10 +36,8 @@ start 'table', id => 'index';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $rep (sort { $b cmp $a } @reps) {
     open R, "$slotdir/$rep/report";
-    my @header = split /:/, scalar <R>;
-    my @config = split /:/, scalar <R>;
-    my ($date, $slot, $rev, $err, $errstr) = @header[2..6];
-    my ($arch, $subarch, $cpu, $os, $cc) = @config[1..5];
+    my $hdr  = split_header scalar <R>;
+    my $conf = split_config scalar <R>;
     my $ntest = 0;
     my $npass = 0;
     my $rtext;
@@ -51,20 +49,20 @@ for my $rep (sort { $b cmp $a } @reps) {
     }
     close R;
     start 'tr';
-    td $date;
-    td $subarch || $arch;
-    td $os;
-    td $cc;
-    td $rev;
+    td $$hdr{date};
+    td $$conf{subarch} || $$conf{arch};
+    td $$conf{os};
+    td $$conf{cc};
+    td $$hdr{rev};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
     } else {
-        $rtext  = $errstr;
+        $rtext  = $$hdr{errstr};
         $rclass = 'fail'
     }
     start 'td', class => $rclass;
-    start 'a', href => "report.cgi?slot=$slot&amp;time=$date";
+    start 'a', href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
     print $rtext;
     end 'a';
     end 'td';

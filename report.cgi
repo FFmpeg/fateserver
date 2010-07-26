@@ -19,17 +19,9 @@ my $report = "$repdir/report";
 
 open R, $report or fail 'Requsted report not found';
 
-my @header = split /:/, scalar <R>;
-$header[0] eq 'fate' or die "Bad magic";
-$header[1] eq '0'    or die "Bad report version";
-my ($date, $slot, $rev, $err, $errstr) = @header[2..6];
-
-my @config = split /:/, scalar <R>;
-my ($arch, $subarch, $cpu, $os, $cc, $config) = @config[1..6];
-if ($config[0] ne 'config') {
-    print "Error in report: exptected 'config', found '$config[0]'\n";
-    exit 1;
-}
+my $hdr  = split_header scalar <R> or fail 'Invalid report';
+my $conf = split_config scalar <R> or fail 'Invalid report';
+$$hdr{version} eq '0'              or fail 'Bad report version';
 
 my @recs;
 my %pass;
@@ -58,7 +50,7 @@ tag 'meta', 'http-equiv' => "Content-Type",
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
             href => 'fate.css';
-print "<title>FATE: $slot $rev</title>\n";
+print "<title>FATE: $$hdr{slot} $$hdr{rev}</title>\n";
 print <<EOF;
 <script type="text/javascript">
   function toggle(id) {
@@ -82,23 +74,23 @@ EOF
 end 'head';
 
 start 'body';
-h1 "$slot $rev", id => 'title';
+h1 "$$hdr{slot} $$hdr{rev}", id => 'title';
 
 start 'table', id => 'config';
-trow 'Architecture',  $arch;
-trow 'Variant',       $subarch;
-trow 'CPU',           $cpu;
-trow 'OS',            $os;
-trow 'Compiler',      $cc;
-trow 'Configuration', $config;
-trow 'Revision',      $rev;
-trow 'Date',          $date;
-trow 'Status',        $err? $errstr : "$npass / $ntest";
+trow 'Architecture',  $$conf{arch};
+trow 'Variant',       $$conf{subarch};
+trow 'CPU',           $$conf{cpu};
+trow 'OS',            $$conf{os};
+trow 'Compiler',      $$conf{cc};
+trow 'Configuration', $$conf{config};
+trow 'Revision',      $$hdr{rev};
+trow 'Date',          $$hdr{date};
+trow 'Status',        $$hdr{err}? $$hdr{errstr} : "$npass / $ntest";
 start 'tr';
 td 'Logs';
 start 'td';
 for my $log ('configure', 'compile', 'test') {
-    start 'a', href => "log.cgi?slot=$slot&amp;time=$date&amp;log=$log";
+    start 'a', href => "log.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}&amp;log=$log";
     print $log;
     end 'a';
     print "\n";

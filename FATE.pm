@@ -8,7 +8,46 @@ BEGIN {
     our ($VERSION, @ISA, @EXPORT);
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
-    @EXPORT  = qw/doctype start end tag h1 trow trowa trowh th td fail/;
+    @EXPORT  = qw/split_header split_config split_rec
+                  doctype start end tag h1 trow trowa trowh th td fail/;
+}
+
+# report utils
+
+sub split_header {
+    my @hdr = split /:/, $_[0];
+    $hdr[0] eq 'fate' or return undef;
+    return {
+        version => $hdr[1],
+        date    => $hdr[2],
+        slot    => $hdr[3],
+        rev     => $hdr[4],
+        status  => $hdr[5],
+        errstr  => $hdr[6],
+    };
+}
+
+sub split_config {
+    my @conf = split /:/, $_[0];
+    $conf[0] eq 'config' or return undef;
+    return {
+        arch    => $conf[1],
+        subarch => $conf[2],
+        cpu     => $conf[3],
+        os      => $conf[4],
+        cc      => $conf[5],
+        config  => $conf[6],
+    };
+}
+
+sub split_rec {
+    my @rec = split /:/, $_[0];
+    return {
+        name   => $rec[0],
+        status => $rec[1],
+        diff   => $rec[2],
+        stderr => $rec[3],
+    };
 }
 
 # HTML helpers

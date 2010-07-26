@@ -69,6 +69,7 @@ for my $rep (sort { $b cmp $a } @reps) {
     anchor $rtext, href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
     end 'td';
     end 'tr';
+    print "\n";
 }
 end 'table';
 end 'body';

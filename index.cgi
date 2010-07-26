@@ -75,6 +75,7 @@ for my $slot (sort @slots) {
     anchor $rtext, href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
     end 'td';
     end 'tr';
+    print "\n";
 }
 end 'table';
 end 'body';

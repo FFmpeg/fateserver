@@ -105,6 +105,14 @@ if ($nfail) {
         my $test = $$rec[0];
         my $diff = encode_entities decode_base64($$rec[2]), '<>&"';
         my $err  = encode_entities decode_base64($$rec[3]), '<>&"';
+        if ($diff =~ /^--- /) {
+            $diff =~ s!^--- .*$!<span class="diff-old">$&</span>!gm;
+            $diff =~ s!^\+\+\+ .*$!<span class="diff-new">$&</span>!gm;
+            $diff =~ s!^\@\@.*\@\@.*$!<span class="diff-hnk">$&</span>!gm;
+            $diff =~ s!^-.*$!<span class="diff-del">$&</span>!gm;
+            $diff =~ s!^\+.*$!<span class="diff-add">$&</span>!gm;
+            $diff =~ s!^ .*$!<span class="diff-nop">$&</span>!gm;
+        }
         start 'tr', class => 'fail';
         td "diff",    class => 'toggle', onclick => "show_diff('$test')";
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";

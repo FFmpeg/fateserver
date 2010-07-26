@@ -54,3 +54,26 @@ th {
     white-space: pre;
     display: none;
 }
+
+.diff-new {
+    font-weight: bold;
+    color: #262;
+}
+
+.diff-old {
+    font-weight: bold;
+    color: #622;
+}
+
+.diff-hnk {
+    font-weight: bold;
+    color: #226;
+}
+
+.diff-add {
+    color: #262;
+}
+
+.diff-del {
+    color: #622;
+}

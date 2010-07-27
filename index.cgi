@@ -25,7 +25,7 @@ end 'head';
 start 'body';
 h1 'FATE';
 
-start 'table', id => 'index';
+start 'table', id => 'index', class => 'replist';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $slot (sort @slots) {
     open R, "$fatedir/$slot/latest/report";

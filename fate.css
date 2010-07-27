@@ -15,11 +15,6 @@ th {
     padding: 0.5em;
 }
 
-#index td, #tests td {
-    border: solid 1px black;
-    padding: 0 0.5em;
-}
-
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
 
@@ -27,10 +22,54 @@ th {
 .pass { background: #5e5; }
 .warn { background: #ff3; }
 
-#index, #tests {
-    border: solid 2px black;
+/* index and history listings */
+
+.replist {
+    border: solid 1px #ddd;
     margin-top: 2em;
 }
+
+.replist tr {
+    border-left:  solid 1px #ddd;
+    border-right: solid 1px #ddd;
+}
+
+.replist th {
+    background: #ccc;
+    border: solid 1px #ddd;
+    border-bottom: solid 2px black;
+}
+
+.replist td {
+    border: solid 1px #ddd;
+    padding: 0 0.5em;
+}
+
+.replist tr:nth-child(even) {
+    background: white;
+}
+
+.replist tr:nth-child(odd) {
+    background: #ddd;
+}
+
+.replist tr:nth-child(even) td {
+    border-color: #ddd;
+}
+
+.replist tr:nth-child(odd) td {
+    border-color: white;
+}
+
+.replist tr:nth-child(odd) td:first-child {
+    border-left: solid 1px #ddd;
+}
+
+.replist tr:nth-child(n) td:last-child {
+    border: solid 1px #ddd;
+}
+
+/* config summary */
 
 #config td:first-child {
     font-weight: bold;
@@ -38,18 +77,33 @@ th {
     vertical-align: top;
 }
 
+/* test listing */
+
 #tests {
+    border: solid 1px #ddd;
+    margin-top: 2em;
     width: 100%;
 }
 
 #tests th {
+    border: solid 1px #ddd;
+    border-bottom: solid 2px black;
     text-align: left;
+}
+
+#tests td {
+    border: solid 1px #ddd;
+    padding: 0 0.5em;
 }
 
 #tests .toggle {
     width: 5em;
     cursor: pointer;
     text-align: center;
+}
+
+#tests th:only-child {
+    border: solid 1px #ddd;
 }
 
 .diff {

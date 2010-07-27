@@ -29,7 +29,7 @@ end 'head';
 start 'body';
 h1 "Report history for $slot";
 
-start 'table', id => 'index';
+start 'table', id => 'history', class => 'replist';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $rep (sort { $b cmp $a } @reps) {
     open R, "$slotdir/$rep/report";

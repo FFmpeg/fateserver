@@ -5,9 +5,6 @@ use warnings;
 
 use FATE;
 
-our $fatedir;
-require "$ENV{FATEWEB_CONFIG}";
-
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;
 closedir D;

@@ -4,9 +4,7 @@ use strict;
 use warnings;
 
 use CGI qw/param/;
-
-our $fatedir;
-require "$ENV{FATEWEB_CONFIG}";
+use FATE;
 
 my $req_slot = param 'slot';
 my $req_time = param 'time';

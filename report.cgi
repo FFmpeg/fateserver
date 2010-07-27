@@ -9,9 +9,6 @@ use HTML::Entities;
 use MIME::Base64;
 use FATE;
 
-our $fatedir;
-require "$ENV{FATEWEB_CONFIG}";
-
 my $req_slot = param 'slot';
 my $req_time = param 'time';
 

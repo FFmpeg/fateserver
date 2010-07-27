@@ -6,9 +6,6 @@ use warnings;
 use CGI qw/param/;
 use FATE;
 
-our $fatedir;
-require "$ENV{FATEWEB_CONFIG}";
-
 my $slot = param 'slot';
 my $slotdir = "$fatedir/$slot";
 

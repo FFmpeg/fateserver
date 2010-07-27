@@ -1,6 +1,7 @@
 #! /bin/sh
 
 set -e
+export LC_ALL=C
 
 die(){
     echo "$@"
@@ -13,11 +14,11 @@ reptmp=$(mktemp -d)
 trap 'rm -r $reptmp' EXIT
 cd $reptmp
 
-tar xz
+tar xzk
 
 header=$(head -n1 report)
-date=$(expr "$header" : 'fate:0:\([0-9]*\)')
-slot=$(expr "$header" : 'fate:0:[0-9]*:\([^:]*\)')
+date=$(expr "$header" : 'fate:0:\([0-9]*\):')
+slot=$(expr "$header" : 'fate:0:[0-9]*:\([A-Za-z0-9_.-]*\):')
 
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 

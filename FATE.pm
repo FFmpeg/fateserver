@@ -12,10 +12,12 @@ BEGIN {
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   doctype start end tag h1 trow trowa trowh th td anchor
-                  fail $fatedir/;
+                  fail $fatedir $recent_age $ancient_age/;
 }
 
 our $fatedir;
+our $recent_age  = 3600;
+our $ancient_age = 3 * 86400;
 
 require "$ENV{FATEWEB_CONFIG}";
 

@@ -47,9 +47,9 @@ for my $slot (sort @slots) {
     my $agestr = agestr $age, $time;
     my $ageclass;
 
-    if ($age < 3600) {
+    if ($age < $recent_age) {
         $ageclass = 'recent';
-    } elsif ($age > 3 * 86400) {
+    } elsif ($age > $ancient_age) {
         $ageclass = 'ancient';
     }
 

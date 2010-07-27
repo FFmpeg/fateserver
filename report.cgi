@@ -126,8 +126,10 @@ if ($nfail) {
         td $err,  colspan => 3;
         end 'tr';
     }
+} elsif ($ntest) {
+    start 'tr'; th 'All tests successful', colspan => 3, class => 'pass'; end;
 } else {
-    trowa { class => 'pass' }, 'All tests successful';
+    start 'tr'; th 'No tests were run',    colspan => 3, class => 'fail'; end;
 }
 end 'table';
 

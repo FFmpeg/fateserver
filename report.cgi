@@ -21,7 +21,6 @@ my $hdr  = split_header scalar <R> or fail 'Invalid report';
 my $conf = split_config scalar <R> or fail 'Invalid report';
 $$hdr{version} eq '0'              or fail 'Bad report version';
 
-my @recs;
 my %pass;
 my %fail;
 

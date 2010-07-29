@@ -10,8 +10,6 @@ table {
 
 th {
     background: #ccc;
-    border: solid 1px black;
-    border-bottom: solid 2px black;
     padding: 0.5em;
 }
 
@@ -25,23 +23,23 @@ th {
 /* index and history listings */
 
 .replist {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     margin-top: 2em;
 }
 
 .replist tr {
-    border-left:  solid 1px #ddd;
-    border-right: solid 1px #ddd;
+    border-left:  solid 1px #eee;
+    border-right: solid 1px #eee;
 }
 
 .replist th {
     background: #ccc;
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     border-bottom: solid 2px black;
 }
 
 .replist td {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     padding: 0 0.5em;
 }
 
@@ -50,11 +48,11 @@ th {
 }
 
 .replist tr:nth-child(odd) {
-    background: #ddd;
+    background: #eee;
 }
 
 .replist tr:nth-child(even) td {
-    border-color: #ddd;
+    border-color: #eee;
 }
 
 .replist tr:nth-child(odd) td {
@@ -62,11 +60,19 @@ th {
 }
 
 .replist tr:nth-child(odd) td:first-child {
-    border-left: solid 1px #ddd;
+    border-left: solid 1px #eee;
 }
 
 .replist tr:nth-child(n) td:last-child {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
+}
+
+.replist tr:hover {
+    background: #ddf;
+}
+
+.replist tr:hover td {
+    border-color: white;
 }
 
 /* config summary */
@@ -80,19 +86,19 @@ th {
 /* test listing */
 
 #tests {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     margin-top: 2em;
     width: 100%;
 }
 
 #tests th {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     border-bottom: solid 2px black;
     text-align: left;
 }
 
 #tests td {
-    border: solid 1px #ddd;
+    border: solid 1px #eee;
     padding: 0 0.5em;
 }
 
@@ -102,8 +108,8 @@ th {
     text-align: center;
 }
 
-#tests th:only-child {
-    border: solid 1px #ddd;
+#tests tr:only-child th {
+    border: solid 1px #eee;
 }
 
 .diff {

@@ -34,7 +34,6 @@ th {
 .replist th {
     background: #ccc;
     border: solid 1px #eee;
-    border-bottom: solid 2px black;
 }
 
 .replist td {
@@ -92,7 +91,6 @@ th {
 
 #tests th {
     border: solid 1px #eee;
-    border-bottom: solid 2px black;
     text-align: left;
 }
 

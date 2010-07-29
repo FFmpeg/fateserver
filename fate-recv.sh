@@ -35,6 +35,7 @@ fi
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
-cp -p report *.log.gz $repdir
+xz report
+cp -p report.xz *.log.gz $repdir
 rm -f $slotdir/latest
 ln -s $date $slotdir/latest

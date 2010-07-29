@@ -32,7 +32,7 @@ h1 "Report history for $slot";
 start 'table', id => 'history', class => 'replist';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $rep (sort { $b cmp $a } @reps) {
-    open R, "$slotdir/$rep/report";
+    open R, '-|', "unxz -c $slotdir/$rep/report.xz";
     my $hdr  = split_header scalar <R>;
     my $conf = split_config scalar <R>;
     my $ntest = 0;

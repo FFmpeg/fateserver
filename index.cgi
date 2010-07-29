@@ -28,7 +28,7 @@ h1 'FATE';
 start 'table', id => 'index', class => 'replist';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
 for my $slot (sort @slots) {
-    open R, "$fatedir/$slot/latest/report";
+    open R, '-|', "unxz -c $fatedir/$slot/latest/report.xz" or next;
     my $hdr  = split_header scalar <R>;
     my $conf = split_config scalar <R>;
     my $ntest = 0;

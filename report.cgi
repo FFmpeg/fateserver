@@ -13,9 +13,9 @@ my $req_slot = param 'slot';
 my $req_time = param 'time';
 
 my $repdir = "$fatedir/$req_slot/$req_time";
-my $report = "$repdir/report";
+my $report = "$repdir/report.xz";
 
-open R, $report or fail 'Requsted report not found';
+open R, '-|', "unxz -c $report" or fail 'Requsted report not found';
 
 my $hdr  = split_header scalar <R> or fail 'Invalid report';
 my $conf = split_config scalar <R> or fail 'Invalid report';

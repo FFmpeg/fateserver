@@ -9,6 +9,7 @@ die(){
 }
 
 test -n "$FATEDIR" || die "FATEDIR not set"
+test -n "$FATE_USER" || die "FATE_USER not set"
 
 reptmp=$(mktemp -d)
 trap 'rm -r $reptmp' EXIT

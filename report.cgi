@@ -25,8 +25,8 @@ my %pass;
 my %fail;
 
 while (<R>) {
-    my @rec = split /:/;
-    ${$rec[1]? \%fail: \%pass}{$rec[0]} = \@rec;
+    my $rec = split_rec $_;
+    ${$$rec{status}? \%fail: \%pass}{$$rec{name}} = $rec;
 }
 
 close R;
@@ -100,9 +100,9 @@ if ($nfail) {
     start 'tr'; th "$nfail failed tests", colspan => 3; end 'tr';
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
-        my $test = $$rec[0];
-        my $diff = encode_entities decode_base64($$rec[2]), '<>&"';
-        my $err  = encode_entities decode_base64($$rec[3]), '<>&"';
+        my $test = $$rec{name};
+        my $diff = encode_entities decode_base64($$rec{diff}), '<>&"';
+        my $err  = encode_entities decode_base64($$rec{stderr}), '<>&"';
         if ($diff =~ /^--- /) {
             $diff =~ s!^--- .*$!<span class="diff-old">$&</span>!gm;
             $diff =~ s!^\+\+\+ .*$!<span class="diff-new">$&</span>!gm;

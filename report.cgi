@@ -87,7 +87,8 @@ trow 'Status',        $$hdr{err}? $$hdr{errstr} : "$npass / $ntest";
 start 'tr';
 td 'Logs';
 start 'td';
-for my $log ('configure', 'compile', 'test') {
+while (my $logfile = glob "$repdir/*.log.gz") {
+    my ($log) = $logfile =~ m!^$repdir/([a-z_.-]+)\.log\.gz$! or next;
     anchor $log, href => "log.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}&amp;log=$log";
     print "\n";
 }

@@ -11,6 +11,7 @@ BEGIN {
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
+                  split_stats load_summary
                   doctype start end tag h1 trow trowa trowh th td anchor
                   fail $fatedir $recent_age $ancient_age/;
 }
@@ -49,6 +50,15 @@ sub split_config {
     };
 }
 
+sub split_stats {
+    my @st = split /:/, $_[0];
+    $st[0] eq 'stats' or return undef;
+    return {
+        ntests => int $st[1],
+        npass  => int $st[2],
+    };
+}
+
 sub split_rec {
     my @rec = split /:/, $_[0];
     return {
@@ -57,6 +67,30 @@ sub split_rec {
         diff   => $rec[2],
         stderr => $rec[3],
     };
+}
+
+sub load_summary {
+    my ($slot, $date) = @_;
+    if (open S, "$fatedir/$slot/$date/summary") {
+        my $hdr  = split_header scalar <S> or return;
+        my $conf = split_config scalar <S> or return;
+        my $st   = split_stats  scalar <S> or return;
+        close S;
+        return { %$hdr, %$conf, %$st };
+    }
+
+    open R, '-|', "unxz -c $fatedir/$slot/$date/report.xz" or return;
+    my $hdr  = split_header scalar <R>;
+    my $conf = split_config scalar <R>;
+    my $ntest = 0;
+    my $npass = 0;
+    while (<R>) {
+        my $rec = split_rec $_;
+        $$rec{status} == 0 and $npass++;
+        $ntest++;
+    }
+    close R;
+    return { %$hdr, %$conf, ntests => $ntest, npass => $npass };
 }
 
 sub parse_date {

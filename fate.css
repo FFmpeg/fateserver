@@ -105,6 +105,10 @@ th {
     text-align: center;
 }
 
+#tests .lastpass {
+    width: 8em;
+}
+
 #tests tr:only-child th {
     border: solid 1px #eee;
 }

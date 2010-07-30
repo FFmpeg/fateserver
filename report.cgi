@@ -12,7 +12,8 @@ use FATE;
 my $req_slot = param 'slot';
 my $req_time = param 'time';
 
-my $repdir = "$fatedir/$req_slot/$req_time";
+my $slotdir = "$fatedir/$req_slot";
+my $repdir = "$slotdir/$req_time";
 my $report = "$repdir/report.xz";
 
 open R, '-|', "unxz -c $report" or fail 'Requsted report not found';
@@ -23,6 +24,7 @@ $$hdr{version} eq '0'              or fail 'Bad report version';
 
 my %pass;
 my %fail;
+my %lastpass;
 
 while (<R>) {
     my $rec = split_rec $_;
@@ -34,6 +36,14 @@ close R;
 my $npass = keys %pass;
 my $nfail = keys %fail;
 my $ntest = $npass + $nfail;
+
+if (open P, "$slotdir/lastpass") {
+    while (<P>) {
+        my ($test, $pdate, $prev) = split /:/;
+        $lastpass{$test} = { date => $pdate, rev => $prev };
+    }
+    close P;
+}
 
 # main text
 
@@ -97,7 +107,10 @@ end;
 
 start 'table', id => 'tests';
 if ($nfail) {
-    start 'tr'; th "$nfail failed tests", colspan => 3; end 'tr';
+    start 'tr';
+    th "$nfail failed tests", colspan => 3;
+    th 'Last good rev', class => 'lastpass';
+    end 'tr';
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
         my $test = $$rec{name};
@@ -115,12 +128,13 @@ if ($nfail) {
         td "diff",    class => 'toggle', onclick => "show_diff('$test')";
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";
         td $test;
+        td $lastpass{$n}? $lastpass{$n}{rev} : 'n / a';
         end 'tr';
         start 'tr', id => "$test-diff", class => 'diff';
-        td $diff, colspan => 3;
+        td $diff, colspan => 4;
         end 'tr';
         start 'tr', id => "$test-err",  class => 'diff';
-        td $err,  colspan => 3;
+        td $err,  colspan => 4;
         end 'tr';
     }
 } elsif ($ntest) {

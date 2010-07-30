@@ -44,7 +44,7 @@ for my $slot (sort @slots) {
         $ageclass = 'ancient';
     }
 
-    start 'tr', class => $ageclass;
+    start 'tr', class => "$ageclass alt hilight";
     start 'td';
     anchor $agestr, href => "history.cgi?slot=$$rep{slot}";
     end 'td';

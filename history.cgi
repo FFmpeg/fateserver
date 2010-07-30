@@ -40,7 +40,7 @@ for my $date (sort { $b cmp $a } @reps) {
     my $rtext;
     my $rclass;
 
-    start 'tr';
+    start 'tr', class => 'alt hilight';
     td agestr $age, $time;
     td $$rep{subarch} || $$rep{arch};
     td $$rep{os};

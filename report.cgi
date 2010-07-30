@@ -105,9 +105,9 @@ end 'td';
 end 'tr';
 end;
 
-start 'table', id => 'tests';
+start 'table', id => 'tests', class => 'replist';
 if ($nfail) {
-    start 'tr';
+    start 'tr', class => 'fail';
     th "$nfail failed tests", colspan => 3;
     th 'Last good rev', class => 'lastpass';
     end 'tr';
@@ -124,7 +124,7 @@ if ($nfail) {
             $diff =~ s!^\+.*$!<span class="diff-add">$&</span>!gm;
             $diff =~ s!^ .*$!<span class="diff-nop">$&</span>!gm;
         }
-        start 'tr', class => 'fail';
+        start 'tr', class => 'alt hilight';
         td "diff",    class => 'toggle', onclick => "show_diff('$test')";
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";
         td $test;

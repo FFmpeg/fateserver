@@ -32,7 +32,6 @@ th {
 }
 
 .replist th {
-    background: #ccc;
     border: solid 1px #eee;
 }
 
@@ -41,23 +40,23 @@ th {
     padding: 0 0.5em;
 }
 
-.replist tr:nth-child(even) {
+.replist tr.alt:nth-child(even) {
     background: white;
 }
 
-.replist tr:nth-child(odd) {
+.replist tr.alt:nth-child(odd) {
     background: #eee;
 }
 
-.replist tr:nth-child(even) td {
+.replist tr.alt:nth-child(even) td {
     border-color: #eee;
 }
 
-.replist tr:nth-child(odd) td {
+.replist tr.alt:nth-child(odd) td {
     border-color: white;
 }
 
-.replist tr:nth-child(odd) td:first-child {
+.replist tr.alt:nth-child(odd) td:first-child {
     border-left: solid 1px #eee;
 }
 
@@ -65,11 +64,11 @@ th {
     border: solid 1px #eee;
 }
 
-.replist tr:hover {
+.replist tr.hilight:hover {
     background: #ddf;
 }
 
-.replist tr:hover td {
+.replist tr.hilight:hover td {
     border-color: white;
 }
 
@@ -90,13 +89,11 @@ th {
 }
 
 #tests th {
-    border: solid 1px #eee;
     text-align: left;
 }
 
-#tests td {
-    border: solid 1px #eee;
-    padding: 0 0.5em;
+#tests .fail th {
+    background: #e44;
 }
 
 #tests .toggle {

@@ -31,39 +31,30 @@ h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
-for my $rep (sort { $b cmp $a } @reps) {
-    open R, '-|', "unxz -c $slotdir/$rep/report.xz";
-    my $hdr  = split_header scalar <R>;
-    my $conf = split_config scalar <R>;
-    my $ntest = 0;
-    my $npass = 0;
+for my $date (sort { $b cmp $a } @reps) {
+    my $rep = load_summary $slot, $date or next;
+    my $ntest = $$rep{ntests};
+    my $npass = $$rep{npass};
+    my $time = parse_date $$rep{date};
+    my $age  = time - $time;
     my $rtext;
     my $rclass;
-    while (<R>) {
-        my @rec = split /:/;
-        $rec[1] == 0 and $npass++;
-        $ntest++;
-    }
-    close R;
-
-    my $time = parse_date $$hdr{date};
-    my $age  = time - $time;
 
     start 'tr';
     td agestr $age, $time;
-    td $$conf{subarch} || $$conf{arch};
-    td $$conf{os};
-    td $$conf{cc};
-    td $$hdr{rev};
+    td $$rep{subarch} || $$rep{arch};
+    td $$rep{os};
+    td $$rep{cc};
+    td $$rep{rev};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
     } else {
-        $rtext  = $$hdr{errstr};
+        $rtext  = $$rep{errstr};
         $rclass = 'fail'
     }
     start 'td', class => $rclass;
-    anchor $rtext, href => "report.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}";
+    anchor $rtext, href => "report.cgi?slot=$$rep{slot}&amp;time=$$rep{date}";
     end 'td';
     end 'tr';
     print "\n";

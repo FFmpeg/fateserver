@@ -99,7 +99,7 @@ trow 'Compiler',      $$conf{cc};
 trow 'Configuration', $$conf{config};
 trow 'Revision',      $$hdr{rev};
 trow 'Date',          asctime gmtime parse_date $$hdr{date};
-trow 'Status',        $$hdr{status}? $$hdr{errstr} : "$npass / $ntest";
+trow 'Status',        $npass? "$npass / $ntest" : $$hdr{errstr};
 start 'tr';
 td 'Logs';
 start 'td';

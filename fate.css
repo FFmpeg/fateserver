@@ -20,6 +20,14 @@ th {
 .pass { background: #5e5; }
 .warn { background: #ff3; }
 
+#failometer {
+    padding: 0;
+}
+
+#failometer span {
+    display: inline-block;
+}
+
 /* index and history listings */
 
 .replist {

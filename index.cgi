@@ -9,6 +9,24 @@ opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;
 closedir D;
 
+my @reps;
+my $allpass = 0;
+my $allfail = 0;
+
+for my $slot (@slots) {
+    my $rep = load_summary $slot, 'latest' or next;
+    push @reps, $rep;
+    if ($$rep{npass} == 0) {
+        $allfail++;
+    } elsif ($$rep{npass} == $$rep{ntests}) {
+        $allpass++;
+    }
+}
+
+$allpass = int 100 * $allpass / @reps;
+$allfail = int 100 * $allfail / @reps;
+my $warn = int 100 - $allpass - $allfail;
+
 print "Content-type: text/html\r\n\r\n";
 
 doctype;
@@ -26,9 +44,18 @@ start 'body';
 h1 'FATE';
 
 start 'table', id => 'index', class => 'replist';
+
+start 'tr';
+start 'td', colspan => 6, id => 'failometer';
+span '&nbsp;', class => 'pass', style => "width: ${allpass}%";
+span '&nbsp;', class => 'warn', style => "width: ${warn}%";
+span '&nbsp;', class => 'fail', style => "width: ${allfail}%";
+end 'td';
+end 'tr';
+trowa { style => 'display: none' }; # maintain even/odd row count
+
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
-for my $slot (sort @slots) {
-    my $rep = load_summary $slot, 'latest' or next;
+for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};

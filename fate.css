@@ -102,6 +102,11 @@ th {
     text-align: center;
 }
 
+#tests .errcode {
+    width: 3em;
+    text-align: center;
+}
+
 #tests .lastpass {
     width: 8em;
 }

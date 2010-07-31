@@ -116,6 +116,7 @@ start 'table', id => 'tests', class => 'replist';
 if ($nfail) {
     start 'tr', class => 'fail';
     th "$nfail failed tests", colspan => 3;
+    th 'Status', class => 'errcode';
     th 'Last good rev', class => 'lastpass';
     end 'tr';
     for my $n (sort keys %fail) {
@@ -135,13 +136,14 @@ if ($nfail) {
         td "diff",    class => 'toggle', onclick => "show_diff('$test')";
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";
         td $test;
+        td $$rec{status}, class => 'errcode';
         td $lastpass{$n}? $lastpass{$n}{rev} : 'n / a';
         end 'tr';
         start 'tr', id => "$test-diff", class => 'diff';
-        td $diff, colspan => 4;
+        td $diff, colspan => 5;
         end 'tr';
         start 'tr', id => "$test-err",  class => 'diff';
-        td $err,  colspan => 4;
+        td $err,  colspan => 5;
         end 'tr';
     }
 } elsif ($ntest) {

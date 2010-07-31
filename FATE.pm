@@ -12,7 +12,7 @@ BEGIN {
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   split_stats load_summary
-                  doctype start end tag h1 trow trowa trowh th td anchor
+                  doctype start end tag h1 span trow trowa trowh th td anchor
                   fail $fatedir $recent_age $ancient_age/;
 }
 
@@ -164,6 +164,13 @@ sub h1 {
     print $text;
     end;
     print "\n";
+}
+
+sub span {
+    my ($text, %attrs) = @_;
+    start 'span', %attrs;
+    print $text;
+    end;
 }
 
 sub trow {

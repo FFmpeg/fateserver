@@ -61,7 +61,7 @@ for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
     my $time = parse_date $$rep{date};
     my $age  = time - $time;
     my $agestr = agestr $age, $time;
-    my $ageclass;
+    my $ageclass = '';
     my $rtext;
     my $rclass;
 

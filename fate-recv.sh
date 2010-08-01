@@ -51,21 +51,23 @@ while read name status rest; do
 done
 exec <&- >&-
 
-sort -o pass pass
+upass(){
+    read pname pdate prev
+    while read lname ldate lrev; do
+        test "$lname" != "$pname" && echo "$pname:$pdate:$prev"
+        pname=$lname
+        pdate=$ldate
+        prev=$lrev
+    done
+    echo "$pname:$pdate:$prev"
+}
+
 lastpass=$slotdir/lastpass
 
 if [ -r $lastpass ]; then
-    exec <$lastpass
-    while read pname pdate prev; do
-        while read lname ldate lrev; do
-            test "$lname" = "$pname" && break
-            echo "$lname:$ldate:$lrev"
-        done
-        echo "$pname:$pdate:$prev"
-    done <pass >lastpass
-    exec <&-
+    sort pass $lastpass | upass >lastpass
 else
-    mv pass lastpass
+    sort -o lastpass pass
 fi
 
 unset IFS

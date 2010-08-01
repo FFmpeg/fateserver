@@ -52,7 +52,7 @@ done
 exec <&- >&-
 
 upass(){
-    read pname pdate prev
+    read pname pdate prev || return 0
     while read lname ldate lrev; do
         test "$lname" != "$pname" && echo "$pname:$pdate:$prev"
         pname=$lname

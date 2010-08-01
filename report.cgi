@@ -132,6 +132,9 @@ if ($nfail) {
             $diff =~ s!^\+.*$!<span class="diff-add">$&</span>!gm;
             $diff =~ s!^ .*$!<span class="diff-nop">$&</span>!gm;
         }
+        if ($diff =~ /^\s*$/) {
+            $diff = '<em>No diff output recorded</em>';
+        }
         start 'tr', class => 'alt hilight';
         td "diff",    class => 'toggle', onclick => "show_diff('$test')";
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";

@@ -71,7 +71,10 @@ sub split_rec {
 
 sub load_summary {
     my ($slot, $date) = @_;
-    if (open S, "$fatedir/$slot/$date/summary") {
+    my $repdir = "$fatedir/$slot/$date";
+    return if not -d $repdir;
+
+    if (open S, "$repdir/summary") {
         my $hdr  = split_header scalar <S> or return;
         my $conf = split_config scalar <S> or return;
         my $st   = split_stats  scalar <S> or return;
@@ -79,9 +82,10 @@ sub load_summary {
         return { %$hdr, %$conf, %$st };
     }
 
-    open R, '-|', "unxz -c $fatedir/$slot/$date/report.xz" or return;
-    my $hdr  = split_header scalar <R>;
-    my $conf = split_config scalar <R>;
+    return if not -f "$repdir/report.xz";
+    open R, '-|', "unxz -c $repdir/report.xz" or return;
+    my $hdr  = split_header scalar <R> or return;
+    my $conf = split_config scalar <R> or return;
     my $ntest = 0;
     my $npass = 0;
     while (<R>) {

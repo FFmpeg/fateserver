@@ -21,6 +21,12 @@ for my $slot (@slots) {
     } elsif ($$rep{npass} == $$rep{ntests}) {
         $allpass++;
     }
+
+    if (my $prev = load_summary $slot, 'previous') {
+        my $nfail = $$rep{ntests}  - $$rep{npass};
+        my $pfail = $$prev{ntests} - $$prev{npass};
+        $$rep{alert} = $nfail <=> $pfail;
+    }
 }
 
 $allpass = int 100 * $allpass / @reps;
@@ -64,6 +70,7 @@ for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
     my $ageclass = '';
     my $rtext;
     my $rclass;
+    my $alert = ('rejoice', '', 'alert')[$$rep{alert} + 1];
 
     if ($age < $recent_age) {
         $ageclass = 'recent';
@@ -71,7 +78,7 @@ for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
         $ageclass = 'ancient';
     }
 
-    start 'tr', class => "$ageclass alt hilight";
+    start 'tr', class => "$ageclass $alert alt hilight";
     start 'td';
     anchor $agestr, href => "history.cgi?slot=$$rep{slot}";
     end 'td';

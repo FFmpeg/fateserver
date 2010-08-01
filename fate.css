@@ -20,6 +20,9 @@ th {
 .pass { background: #5e5; }
 .warn { background: #ff3; }
 
+.alert   { color: #911; }
+.rejoice { color: #191; }
+
 #failometer {
     padding: 0;
 }

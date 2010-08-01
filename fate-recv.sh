@@ -79,6 +79,7 @@ mkdir $repdir
 gzip -9 *.log
 xz report
 cp -p summary report.xz *.log.gz $repdir
-rm -f $slotdir/latest
+rm -f $slotdir/previous
+test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous
 ln -s $date $slotdir/latest
 cp lastpass ${lastpass}.new && mv ${lastpass}.new $lastpass

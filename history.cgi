@@ -30,7 +30,10 @@ start 'body';
 h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
+start 'thead';
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
+end 'thead';
+start 'tbody';
 for my $date (sort { $b cmp $a } @reps) {
     my $rep = load_summary $slot, $date or next;
     my $ntest = $$rep{ntests};
@@ -59,6 +62,7 @@ for my $date (sort { $b cmp $a } @reps) {
     end 'tr';
     print "\n";
 }
+end 'tbody';
 end 'table';
 end 'body';
 end 'html';

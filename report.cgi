@@ -114,11 +114,14 @@ end;
 
 start 'table', id => 'tests', class => 'replist';
 if ($nfail) {
+    start 'thead';
     start 'tr', class => 'fail';
     th "$nfail failed tests", colspan => 3;
     th 'Status', class => 'errcode';
     th 'Last good rev', class => 'lastpass';
     end 'tr';
+    end 'thead';
+    start 'tbody';
     for my $n (sort keys %fail) {
         my $rec = $fail{$n};
         my $test = $$rec{name};
@@ -149,6 +152,7 @@ if ($nfail) {
         td $err,  colspan => 5;
         end 'tr';
     }
+    end 'tbody';
 } elsif ($ntest) {
     start 'tr'; th 'All tests successful', colspan => 3, class => 'pass'; end;
 } else {

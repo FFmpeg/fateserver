@@ -50,7 +50,7 @@ start 'body';
 h1 'FATE';
 
 start 'table', id => 'index', class => 'replist';
-
+start 'thead';
 start 'tr';
 start 'td', colspan => 6, id => 'failometer';
 span '&nbsp;', class => 'pass', style => "width: ${allpass}%";
@@ -58,9 +58,9 @@ span '&nbsp;', class => 'warn', style => "width: ${warn}%";
 span '&nbsp;', class => 'fail', style => "width: ${allfail}%";
 end 'td';
 end 'tr';
-trowa { style => 'display: none' }; # maintain even/odd row count
-
 trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
+end 'thead';
+start 'tbody';
 for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
@@ -99,6 +99,7 @@ for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
     end 'tr';
     print "\n";
 }
+end 'tbody';
 end 'table';
 end 'body';
 end 'html';

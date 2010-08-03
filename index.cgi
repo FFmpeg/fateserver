@@ -25,7 +25,7 @@ for my $slot (@slots) {
     if (my $prev = load_summary $slot, 'previous') {
         my $nfail = $$rep{ntests}  - $$rep{npass};
         my $pfail = $$prev{ntests} - $$prev{npass};
-        $$rep{alert} = $nfail <=> $pfail;
+        $$rep{alert} = $$rep{ntests} && $nfail <=> $pfail;
     }
 }
 

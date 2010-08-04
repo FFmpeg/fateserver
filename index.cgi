@@ -33,7 +33,14 @@ $allpass = int 100 * $allpass / @reps;
 $allfail = int 100 * $allfail / @reps;
 my $warn = int 100 - $allpass - $allfail;
 
-print "Content-type: text/html\r\n\r\n";
+print "Content-type: text/html\r\n";
+
+if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
+    print "Content-Encoding: gzip\r\n\r\n";
+    open STDOUT, '|-', 'gzip';
+} else {
+    print "\r\n";
+}
 
 doctype;
 start 'html', xmlns => "http://www.w3.org/1999/xhtml";

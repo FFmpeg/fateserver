@@ -11,7 +11,7 @@ BEGIN {
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
-                  split_stats load_summary
+                  split_stats load_summary load_report
                   doctype start end tag h1 span trow trowa trowh th td anchor
                   fail $fatedir $recent_age $ancient_age/;
 }
@@ -95,6 +95,29 @@ sub load_summary {
     }
     close R;
     return { %$hdr, %$conf, ntests => $ntest, npass => $npass };
+}
+
+sub load_report {
+    my ($slot, $date) = @_;
+    my $report = "$fatedir/$slot/$date/report.xz";
+    my @recs;
+
+    return if not -f $report;
+
+    open R, '-|', "unxz -c $report" or return;
+
+    my $hdr  = split_header scalar <R> or return;
+    my $conf = split_config scalar <R> or return;
+    $$hdr{version} eq '0'              or return undef;
+
+    while (<R>) {
+        my $rec = split_rec $_;
+        push @recs, $rec;
+    }
+
+    close R;
+
+    return { header => $hdr, conf => $conf, recs => \@recs };
 }
 
 sub parse_date {

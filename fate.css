@@ -83,6 +83,15 @@ th {
     border-color: white;
 }
 
+th a:link, th a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+th a:hover {
+    text-decoration: underline;
+}
+
 #index .resleft {
     border-left: solid 1px white;
     border-right: none;

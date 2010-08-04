@@ -3,6 +3,7 @@
 use strict;
 use warnings;
 
+use CGI qw/param/;
 use FATE;
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
@@ -32,6 +33,24 @@ for my $slot (@slots) {
 $allpass = int 100 * $allpass / @reps;
 $allfail = int 100 * $allfail / @reps;
 my $warn = int 100 - $allpass - $allfail;
+
+my $sort = param('asort') || param('dsort') || 'slot';
+my $sdir = param('dsort') ? -1 : 1;
+
+(my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
+my $params = join '&', map param($_), grep $_ !~ 'sort', param;
+$params .= '&' if $params;
+
+sub lsort {
+    my ($text, $key, $p) = @_;
+    if ($sort eq $key) {
+        $p = param('asort') ? 'dsort' : 'asort';
+    }
+    if (!$p) {
+        $p = 'asort';
+    }
+    anchor $text, href => "$uri?$params$p=$key";
+}
 
 print "Content-type: text/html\r\n";
 
@@ -80,16 +99,16 @@ span '&nbsp;', class => 'fail', style => "width: ${allfail}%";
 end 'td';
 end 'tr';
 start 'tr';
-th 'Time';
-th 'Arch';
-th 'OS';
-th 'Compiler';
-th 'Rev';
-th 'Result', colspan => 2;
+start 'th'; lsort 'Time',     'date', 'dsort'; end 'th';
+start 'th'; lsort 'Arch',     'arch';          end 'th';
+start 'th'; lsort 'OS',       'os';            end 'th';
+start 'th'; lsort 'Compiler', 'cc';            end 'th';
+start 'th'; lsort 'Rev',      'rev';           end 'th';
+start 'th', colspan => 2; lsort 'Result', 'npass'; end 'th';
 end 'tr';
 end 'thead';
 start 'tbody';
-for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
+for my $rep (sort { $sdir * ($$a{$sort} cmp $$b{$sort}) } @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};

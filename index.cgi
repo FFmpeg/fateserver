@@ -115,10 +115,10 @@ for my $rep (sort { $$a{slot} cmp $$b{slot} } @reps) {
         $rtext  = $$rep{errstr};
         $rclass = 'fail'
     }
-    start 'td', class => $rclass;
+    start 'td', class => "$rclass resleft";
     anchor $rtext, href => "report.cgi?slot=$$rep{slot}&amp;time=$$rep{date}";
     end 'td';
-    start 'td', class => $rclass;
+    start 'td', class => "$rclass resright";
     if ($npass < $ntest) {
         span '&#9658;', class => 'toggle', onclick => "toggle('$slotid', this)";
     }

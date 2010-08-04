@@ -72,7 +72,7 @@ th {
 }
 
 .replist tr:nth-child(n) td:last-child {
-    border: solid 1px #eee;
+    border-right: solid 1px #eee;
 }
 
 .replist tr.hilight:hover {
@@ -81,6 +81,16 @@ th {
 
 .replist tr.hilight:hover td {
     border-color: white;
+}
+
+#index .resleft {
+    border-left: solid 1px white;
+    border-right: none;
+}
+
+#index .resright {
+    border-left: none;
+    border-right: solid 1px #eee;
 }
 
 #index .toggle {

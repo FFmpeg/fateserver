@@ -36,6 +36,17 @@ my $warn = int 100 - $allpass - $allfail;
 
 my $sort = param('asort') || param('dsort') || 'slot';
 my $sdir = param('dsort') ? -1 : 1;
+my $repcmp;
+
+if ($sort eq 'arch') {
+    $repcmp = sub {
+        $sdir * (($$a{subarch} || $$a{arch}) cmp ($$b{subarch} || $$b{arch}));
+    }
+} else {
+    $repcmp = sub {
+        $sdir * ($$a{$sort} cmp $$b{$sort});
+    }
+}
 
 (my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
 my $params = join '&', map param($_), grep $_ !~ 'sort', param;
@@ -108,7 +119,7 @@ start 'th', colspan => 2; lsort 'Result', 'npass'; end 'th';
 end 'tr';
 end 'thead';
 start 'tbody';
-for my $rep (sort { $sdir * ($$a{$sort} cmp $$b{$sort}) } @reps) {
+for my $rep (sort { &$repcmp || $$a{slot} cmp $$b{slot} } @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};

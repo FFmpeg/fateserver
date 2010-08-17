@@ -22,7 +22,7 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
-            href => 'fate.css';
+            href => '/fate.css';
 print "<title>FATE: $slot</title>\n";
 end 'head';
 
@@ -57,7 +57,7 @@ for my $date (sort { $b cmp $a } @reps) {
         $rclass = 'fail'
     }
     start 'td', class => $rclass;
-    anchor $rtext, href => "report.cgi?slot=$$rep{slot}&amp;time=$$rep{date}";
+    anchor $rtext, href => href slot => $$rep{slot}, time => $$rep{date};
     end 'td';
     end 'tr';
     print "\n";

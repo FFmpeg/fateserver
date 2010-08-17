@@ -13,12 +13,13 @@ BEGIN {
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   split_stats load_summary load_report
                   doctype start end tag h1 span trow trowa trowh th td anchor
-                  fail $fatedir $recent_age $ancient_age/;
+                  fail $fatedir $recent_age $ancient_age href/;
 }
 
 our $fatedir;
 our $recent_age  = 3600;
 our $ancient_age = 3 * 86400;
+our $pretty_links = 0;
 
 require "$ENV{FATEWEB_CONFIG}";
 
@@ -241,6 +242,17 @@ sub anchor {
     start 'a', %attrs;
     print $text;
     end;
+}
+
+sub href {
+    my (%href) = @_;
+    if ($pretty_links) {
+        my @parts = ('slot', 'time', 'log');
+        return '/' . join '/', grep defined $_, @href{@parts};
+    } else {
+        my $cgi = defined $href{log}? 'log': defined $href{time}? 'report': 'history';
+        return sprintf '/%s.cgi?%s', $cgi, join '&amp;', map "$_=$href{$_}", keys %href;
+    }
 }
 
 sub fail {

@@ -79,7 +79,7 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
-            href => 'fate.css';
+            href => '/fate.css';
 print "<title>FATE</title>\n";
 print <<EOF;
 <script type="text/javascript">
@@ -139,7 +139,7 @@ for my $rep (sort { &$repcmp || $$a{slot} cmp $$b{slot} } @reps) {
 
     start 'tr', class => "$ageclass $alert alt hilight";
     start 'td';
-    anchor $agestr, href => "history.cgi?slot=$$rep{slot}";
+    anchor $agestr, href => href slot => $$rep{slot};
     end 'td';
     td $$rep{subarch} || $$rep{arch};
     td $$rep{os};
@@ -153,7 +153,7 @@ for my $rep (sort { &$repcmp || $$a{slot} cmp $$b{slot} } @reps) {
         $rclass = 'fail'
     }
     start 'td', class => "$rclass resleft";
-    anchor $rtext, href => "report.cgi?slot=$$rep{slot}&amp;time=$$rep{date}";
+    anchor $rtext, href => href slot => $$rep{slot}, time => $$rep{date};
     end 'td';
     start 'td', class => "$rclass resright";
     if ($npass < $ntest) {

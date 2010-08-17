@@ -63,7 +63,7 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
-            href => 'fate.css';
+            href => '/fate.css';
 print "<title>FATE: $$hdr{slot} $$hdr{rev}</title>\n";
 print <<EOF;
 <script type="text/javascript">
@@ -105,7 +105,7 @@ td 'Logs';
 start 'td';
 while (my $logfile = glob "$repdir/*.log.gz") {
     my ($log) = $logfile =~ m!^$repdir/([a-z_.-]+)\.log\.gz$! or next;
-    anchor $log, href => "log.cgi?slot=$$hdr{slot}&amp;time=$$hdr{date}&amp;log=$log";
+    anchor $log, href => href slot=>$$hdr{slot}, time=>$$hdr{date}, log=>$log;
     print "\n";
 }
 end 'td';

@@ -128,21 +128,30 @@ sub parse_date {
 
 sub agestr {
     my ($age, $time) = @_;
-    my $agestr;
+
     if ($age <= 0) {
-        $agestr = 'Right now';
-    } elsif ($age < 60) {
-        $agestr = "$age seconds ago";
-    } elsif ($age < 60 * 120) {
-        $agestr = sprintf '%d minutes ago', $age / 60;
-    } elsif ($age < 48 * 3600) {
-        $agestr = sprintf '%d hours ago',   $age / 3600;
-    } elsif ($age < 14 * 86400) {
-        $agestr = sprintf '%d days ago',    $age / 86400;
-    } else {
-        $agestr = asctime gmtime $time;
+        return 'Right now';
+    } elsif ($age > 14 * 86400) {
+        return asctime gmtime $time;
     }
-    return $agestr;
+
+    my $agestr;
+
+    if ($age < 60) {
+        $agestr = 'second';
+    } elsif ($age < 60 * 120) {
+        $age /= 60;
+        $agestr = 'minute';
+    } elsif ($age < 48 * 3600) {
+        $age /= 3600;
+        $agestr = 'hour';
+    } else {
+        $age /= 86400;
+        $agestr = 'day';
+    }
+
+    $agestr .= 's' if int $age > 1;
+    return sprintf "%d $agestr ago", $age;
 }
 
 # HTML helpers

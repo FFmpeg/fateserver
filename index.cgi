@@ -15,6 +15,7 @@ my $allpass = 0;
 my $allfail = 0;
 
 for my $slot (@slots) {
+    next if -e "$fatedir/$slot/hidden";
     my $rep = load_summary $slot, 'latest' or next;
     push @reps, $rep;
     if ($$rep{npass} == 0) {

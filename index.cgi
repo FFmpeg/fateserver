@@ -17,6 +17,7 @@ my $allfail = 0;
 for my $slot (@slots) {
     next if -e "$fatedir/$slot/hidden";
     my $rep = load_summary $slot, 'latest' or next;
+    $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     push @reps, $rep;
     if ($$rep{npass} == 0) {
         $allfail++;
@@ -142,7 +143,7 @@ for my $rep (sort { &$repcmp || $$a{slot} cmp $$b{slot} } @reps) {
     start 'td';
     anchor $agestr, href => href slot => $$rep{slot};
     end 'td';
-    td $$rep{subarch} || $$rep{arch};
+    td $$rep{subarch};
     td $$rep{os};
     td $$rep{cc};
     td $$rep{rev};

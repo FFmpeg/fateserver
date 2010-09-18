@@ -132,7 +132,7 @@ sub agestr {
     if ($age <= 0) {
         return 'Right now';
     } elsif ($age > 14 * 86400) {
-        return asctime gmtime $time;
+        return POSIX::strftime "%F", gmtime $time;
     }
 
     my $agestr;

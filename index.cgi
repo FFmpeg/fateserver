@@ -31,9 +31,9 @@ for my $slot (@slots) {
     }
 }
 
-$allpass = int 100 * $allpass / @reps;
-$allfail = int 100 * $allfail / @reps;
-my $warn = int 100 - $allpass - $allfail;
+$allpass = 100 * $allpass / @reps;
+$allfail = 100 * $allfail / @reps;
+my $warn = 100 - $allpass - $allfail;
 
 my $sort = param('asort') || param('dsort') || 'slot';
 my $sdir = param('dsort') ? -1 : 1;
@@ -105,9 +105,9 @@ start 'table', id => 'index', class => 'replist';
 start 'thead';
 start 'tr';
 start 'td', colspan => 7, id => 'failometer';
-span '&nbsp;', class => 'pass', style => "width: ${allpass}%";
-span '&nbsp;', class => 'warn', style => "width: ${warn}%";
-span '&nbsp;', class => 'fail', style => "width: ${allfail}%";
+span '&nbsp;', class => 'pass', style => "width: ${allpass}%" if $allpass;
+span '&nbsp;', class => 'warn', style => "width: ${warn}%"    if $warn;
+span '&nbsp;', class => 'fail', style => "width: ${allfail}%" if $allfail;
 end 'td';
 end 'tr';
 start 'tr';

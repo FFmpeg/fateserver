@@ -36,19 +36,19 @@ $allpass = 100 * $allpass / @reps;
 $allfail = 100 * $allfail / @reps;
 my $warn = 100 - $allpass - $allfail;
 
-my $sort = param('asort') || param('dsort') || 'slot';
+my @sort = ('subarch', 'os', 'cc', 'slot');
+my $sort = param('asort') || param('dsort');
 my $sdir = param('dsort') ? -1 : 1;
-my $repcmp;
+defined $sort and unshift @sort, $sort eq 'arch'? 'subarch': $sort;
+$sort ||= $sort[0];
 
-if ($sort eq 'arch') {
-    $repcmp = sub {
-        $sdir * (($$a{subarch} || $$a{arch}) cmp ($$b{subarch} || $$b{arch}));
+sub repcmp {
+    my $r;
+    for my $s (@sort) {
+        last if $r = $sdir * (lc $$a{$s} cmp lc $$b{$s});
     }
-} else {
-    $repcmp = sub {
-        $sdir * ($$a{$sort} cmp $$b{$sort});
-    }
-}
+    return $r;
+};
 
 (my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
 my $params = join '&', map param($_), grep $_ !~ 'sort', param;
@@ -121,7 +121,7 @@ start 'th', colspan => 2; lsort 'Result', 'npass'; end 'th';
 end 'tr';
 end 'thead';
 start 'tbody';
-for my $rep (sort { &$repcmp || $$a{slot} cmp $$b{slot} } @reps) {
+for my $rep (sort repcmp @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};

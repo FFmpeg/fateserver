@@ -152,7 +152,20 @@ if ($nfail) {
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";
         td $test;
         td $$rec{status}, class => 'errcode';
-        td $lastpass{$n}? $lastpass{$n}{rev} : 'n / a';
+        if ($lastpass{$n} and $gitweb) {
+            my ($old, $new);
+            $lastpass{$n}{rev} =~ /git-(.*)/ and $old = $1;
+            $$hdr{rev}         =~ /git-(.*)/ and $new = $1;
+            if ($old and $new) {
+                start 'td';
+                anchor $lastpass{$n}{rev}, href => "$gitweb;a=shortlog;h=$new;hp=$old";
+                end 'td';
+            } else {
+                td $lastpass{$n}{rev};
+            }
+        } else {
+            td $lastpass{$n}? $lastpass{$n}{rev} : 'n / a';
+        }
         end 'tr';
         start 'tr', id => "$test-diff", class => 'diff';
         td $diff, colspan => 5;

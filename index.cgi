@@ -17,6 +17,7 @@ my $allfail = 0;
 for my $slot (@slots) {
     next if -e "$fatedir/$slot/hidden";
     my $rep = load_summary $slot, 'latest' or next;
+    next if time - parse_date($$rep{date}) > $hidden_age;
     $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     push @reps, $rep;
     if ($$rep{npass} == 0) {

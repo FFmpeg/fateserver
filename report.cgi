@@ -97,7 +97,16 @@ trow 'CPU',           $$conf{cpu};
 trow 'OS',            $$conf{os};
 trow 'Compiler',      $$conf{cc};
 trow 'Configuration', $$conf{config};
-trow 'Revision',      $$hdr{rev};
+start 'tr';
+td   'Revision';
+if ($gitweb and $$hdr{rev} =~ /git-(.*)/) {
+    start 'td';
+    anchor $$hdr{rev}, href => "$gitweb;a=commit;h=$1";
+    end 'td';
+} else {
+    td $$hdr{rev};
+}
+end 'tr';
 trow 'Date',          asctime gmtime parse_date $$hdr{date};
 trow 'Status',        $npass? "$npass / $ntest" : "$$hdr{errstr} ($$hdr{status})";
 start 'tr';

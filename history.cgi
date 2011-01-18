@@ -48,7 +48,13 @@ for my $date (sort { $b cmp $a } @reps) {
     td $$rep{subarch} || $$rep{arch};
     td $$rep{os};
     td $$rep{cc};
-    td $$rep{rev};
+    if ($gitweb and $$rep{rev} =~ /git-(.*)/) {
+        start 'td';
+        anchor $$rep{rev}, href => "$gitweb;a=commit;h=$1";
+        end 'td';
+    } else {
+        td $$rep{rev};
+    }
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';

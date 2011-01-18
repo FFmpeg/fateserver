@@ -13,7 +13,8 @@ BEGIN {
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   split_stats load_summary load_report
                   doctype start end tag h1 span trow trowa trowh th td anchor
-                  fail $fatedir $recent_age $ancient_age $hidden_age href/;
+                  fail $fatedir $recent_age $ancient_age $hidden_age href
+                  $gitweb/;
 }
 
 our $fatedir;
@@ -21,6 +22,7 @@ our $recent_age  = 3600;
 our $ancient_age = 3 * 86400;
 our $hidden_age  = 30 * 86400;
 our $pretty_links = 0;
+our $gitweb;
 
 require "$ENV{FATEWEB_CONFIG}";
 

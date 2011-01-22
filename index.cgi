@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use CGI qw/param/;
+use HTML::Entities;
 use FATE;
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
@@ -131,6 +132,7 @@ for my $rep (sort repcmp @reps) {
     my $ageclass = '';
     my $rtext;
     my $rclass;
+    my $log;
     my $alert = ('rejoice', '', 'alert')[$$rep{alert} + 1];
     (my $slotid = $$rep{slot}) =~ s/[^a-z0-9_-]/_/ig;
 
@@ -159,13 +161,20 @@ for my $rep (sort repcmp @reps) {
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
     } else {
         $rtext  = $$rep{errstr};
-        $rclass = 'fail'
+        $rclass = 'fail';
+        for my $base ('test', 'compile', 'configure') {
+            my $file = "$fatedir/$$rep{slot}/$$rep{date}/$base.log.gz";
+            if (-r $file) {
+                $log = qx{zcat $file | tail -n20};
+                last;
+            }
+        }
     }
     start 'td', class => "$rclass resleft";
     anchor $rtext, href => href slot => $$rep{slot}, time => $$rep{date};
     end 'td';
     start 'td', class => "$rclass resright";
-    if ($npass < $ntest) {
+    if ($npass < $ntest or $log) {
         span '&#9658;', class => 'toggle', onclick => "toggle('$slotid', this)";
     }
     end 'td';
@@ -196,6 +205,15 @@ for my $rep (sort repcmp @reps) {
         end 'td';
         end 'tr';
         print "\n";
+        trowa { style => 'display: none' }, '';
+    } elsif ($log) {
+        start 'tr', id => $slotid, class => 'slotfail';
+        start 'td', colspan => 7;
+        start 'pre', class => 'minilog';
+        print encode_entities($log, '<>&"');
+        end 'pre';
+        end 'td';
+        end 'tr';
         trowa { style => 'display: none' }, '';
     }
 }

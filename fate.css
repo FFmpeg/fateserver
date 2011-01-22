@@ -125,6 +125,12 @@ table.minirep {
     text-align: left;
 }
 
+.minilog {
+    border: solid 1px #eee;
+    padding: 0.5em;
+    margin: 0;
+}
+
 /* config summary */
 
 #config td:first-child {

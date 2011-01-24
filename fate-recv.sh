@@ -77,7 +77,7 @@ echo "stats:$ntest:$npass" >>summary
 repdir=$slotdir/$date
 mkdir $repdir
 gzip -9 *.log
-xz report
+xz -8 report
 cp -p summary report.xz *.log.gz $repdir
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous

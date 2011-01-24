@@ -72,7 +72,9 @@ fi
 
 unset IFS
 
-echo "stats:$ntest:$npass" >>summary
+nwarn=$(grep -Eci '\<warning\>' compile.log)
+
+echo "stats:$ntest:$npass:$nwarn" >>summary
 
 repdir=$slotdir/$date
 mkdir $repdir

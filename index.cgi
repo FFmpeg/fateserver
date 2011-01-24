@@ -115,10 +115,10 @@ end 'td';
 end 'tr';
 start 'tr';
 start 'th'; lsort 'Time',     'date', 'dsort'; end 'th';
+start 'th'; lsort 'Rev',      'rev';           end 'th';
 start 'th'; lsort 'Arch',     'arch';          end 'th';
 start 'th'; lsort 'OS',       'os';            end 'th';
 start 'th'; lsort 'Compiler', 'cc';            end 'th';
-start 'th'; lsort 'Rev',      'rev';           end 'th';
 start 'th', colspan => 2; lsort 'Result', 'npass'; end 'th';
 end 'tr';
 end 'thead';
@@ -146,9 +146,6 @@ for my $rep (sort repcmp @reps) {
     start 'td';
     anchor $agestr, href => href slot => $$rep{slot};
     end 'td';
-    td $$rep{subarch};
-    td $$rep{os};
-    td $$rep{cc};
     if ($gitweb and $$rep{rev} =~ /git-(.*)/) {
         start 'td';
         anchor $$rep{rev}, href => "$gitweb;a=commit;h=$1";
@@ -156,6 +153,9 @@ for my $rep (sort repcmp @reps) {
     } else {
         td $$rep{rev};
     }
+    td $$rep{subarch};
+    td $$rep{os};
+    td $$rep{cc};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';

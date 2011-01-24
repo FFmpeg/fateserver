@@ -31,7 +31,7 @@ h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
 start 'thead';
-trowh 'Time', 'Arch', 'OS', 'Compiler', 'Rev', 'Result';
+trowh 'Time', 'Rev', 'Arch', 'OS', 'Compiler', 'Result';
 end 'thead';
 start 'tbody';
 for my $date (sort { $b cmp $a } @reps) {
@@ -45,9 +45,6 @@ for my $date (sort { $b cmp $a } @reps) {
 
     start 'tr', class => 'alt hilight';
     td agestr $age, $time;
-    td $$rep{subarch} || $$rep{arch};
-    td $$rep{os};
-    td $$rep{cc};
     if ($gitweb and $$rep{rev} =~ /git-(.*)/) {
         start 'td';
         anchor $$rep{rev}, href => "$gitweb;a=commit;h=$1";
@@ -55,6 +52,9 @@ for my $date (sort { $b cmp $a } @reps) {
     } else {
         td $$rep{rev};
     }
+    td $$rep{subarch} || $$rep{arch};
+    td $$rep{os};
+    td $$rep{cc};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';

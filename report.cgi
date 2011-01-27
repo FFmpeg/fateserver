@@ -37,6 +37,8 @@ my $npass = keys %pass;
 my $nfail = keys %fail;
 my $ntest = $npass + $nfail;
 
+my $rep = load_summary $req_slot, $req_time;
+
 if (open P, "$slotdir/lastpass") {
     while (<P>) {
         my ($test, $pdate, $prev) = split /:/;
@@ -109,6 +111,7 @@ if ($gitweb and $$hdr{rev} =~ /git-(.*)/) {
 end 'tr';
 trow 'Date',          asctime gmtime parse_date $$hdr{date};
 trow 'Status',        $npass? "$npass / $ntest" : "$$hdr{errstr} ($$hdr{status})";
+trow 'Warnings',      $$rep{nwarn};
 start 'tr';
 td 'Logs';
 start 'td';

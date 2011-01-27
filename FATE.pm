@@ -60,6 +60,7 @@ sub split_stats {
     return {
         ntests => int $st[1],
         npass  => int $st[2],
+        nwarn  =>     $st[3],
     };
 }
 

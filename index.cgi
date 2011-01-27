@@ -31,6 +31,8 @@ for my $slot (@slots) {
         my $nfail = $$rep{ntests}  - $$rep{npass};
         my $pfail = $$prev{ntests} - $$prev{npass};
         $$rep{alert} = $$rep{ntests} && $nfail <=> $pfail;
+        $$rep{dwarn} = $$rep{nwarn} <=> $$prev{nwarn};
+        $$rep{pdate} = $$prev{date};
     }
 }
 
@@ -44,10 +46,15 @@ my $sdir = param('dsort') ? -1 : 1;
 defined $sort and unshift @sort, $sort eq 'arch'? 'subarch': $sort;
 $sort ||= $sort[0];
 
+sub nscmp {
+    my ($a, $b) = @_;
+    return int $a || int $b ? $a <=> $b : lc $a cmp lc $b;
+}
+
 sub repcmp {
     my $r;
     for my $s (@sort) {
-        last if $r = $sdir * (lc $$a{$s} cmp lc $$b{$s});
+        last if $r = $sdir * nscmp $$a{$s}, $$b{$s};
     }
     return $r;
 };
@@ -107,7 +114,7 @@ h1 'FATE';
 start 'table', id => 'index', class => 'replist';
 start 'thead';
 start 'tr';
-start 'td', colspan => 7, id => 'failometer';
+start 'td', colspan => 9, id => 'failometer';
 span '&nbsp;', class => 'pass', style => "width: ${allpass}%" if $allpass;
 span '&nbsp;', class => 'warn', style => "width: ${warn}%"    if $warn;
 span '&nbsp;', class => 'fail', style => "width: ${allfail}%" if $allfail;
@@ -119,7 +126,8 @@ start 'th'; lsort 'Rev',      'rev';           end 'th';
 start 'th'; lsort 'Arch',     'arch';          end 'th';
 start 'th'; lsort 'OS',       'os';            end 'th';
 start 'th'; lsort 'Compiler', 'cc';            end 'th';
-start 'th', colspan => 2; lsort 'Result', 'npass'; end 'th';
+start 'th', colspan => 2; lsort 'Warnings', 'nwarn'; end 'th';
+start 'th', colspan => 2; lsort 'Tests', 'npass'; end 'th';
 end 'tr';
 end 'thead';
 start 'tbody';
@@ -134,6 +142,7 @@ for my $rep (sort repcmp @reps) {
     my $rclass;
     my $log;
     my $alert = ('rejoice', '', 'alert')[$$rep{alert} + 1];
+    my $walert = ('rejoice', '', 'alert')[$$rep{dwarn} + 1];
     (my $slotid = $$rep{slot}) =~ s/[^a-z0-9_-]/_/ig;
 
     if ($age < $recent_age) {
@@ -170,6 +179,15 @@ for my $rep (sort repcmp @reps) {
             }
         }
     }
+    start 'td', class => 'warnleft';
+    anchor $$rep{nwarn}, class => $walert,
+      href => href slot => $$rep{slot}, time => $$rep{date}, log => 'compile';
+    end;
+    start 'td', class => 'warnright';
+    anchor '±', class => $walert,
+      href => href slot => $$rep{slot}, time => $$rep{date},
+        log => "compile/$$rep{pdate}";
+    end;
     start 'td', class => "$rclass resleft";
     anchor $rtext, href => href slot => $$rep{slot}, time => $$rep{date};
     end 'td';
@@ -185,7 +203,7 @@ for my $rep (sort repcmp @reps) {
         my @fail = grep $$_{status} ne '0', @{$$report{recs}};
         my $nfail = @fail;
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 7;
+        start 'td', colspan => 9;
         start 'table', class => 'minirep';
         start 'thead';
         start 'tr';
@@ -208,7 +226,7 @@ for my $rep (sort repcmp @reps) {
         trowa { style => 'display: none' }, '';
     } elsif ($log) {
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 7;
+        start 'td', colspan => 9;
         start 'pre', class => 'minilog';
         print encode_entities($log, '<>&"');
         end 'pre';

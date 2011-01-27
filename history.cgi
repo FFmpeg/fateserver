@@ -31,7 +31,7 @@ h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
 start 'thead';
-trowh 'Time', 'Rev', 'Arch', 'OS', 'Compiler', 'Result';
+trowh 'Time', 'Rev', 'Arch', 'OS', 'Compiler', 'Warnings', 'Tests';
 end 'thead';
 start 'tbody';
 for my $date (sort { $b cmp $a } @reps) {
@@ -55,6 +55,7 @@ for my $date (sort { $b cmp $a } @reps) {
     td $$rep{subarch} || $$rep{arch};
     td $$rep{os};
     td $$rep{cc};
+    td $$rep{nwarn};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';

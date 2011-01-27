@@ -92,6 +92,10 @@ th a:hover {
     text-decoration: underline;
 }
 
+#index .warnleft    { border-right: none; }
+#index .warnright   { border-left:  none; }
+#index .warnright a { text-decoration: none; }
+
 #index .resleft {
     border-left: solid 1px white;
     border-right: none;

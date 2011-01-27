@@ -34,7 +34,7 @@ start 'thead';
 trowh 'Time', 'Rev', 'Arch', 'OS', 'Compiler', 'Warnings', 'Tests';
 end 'thead';
 start 'tbody';
-for my $date (sort { $b cmp $a } @reps) {
+for my $date ((sort { $b cmp $a } @reps)[0..49]) {
     my $rep = load_summary $slot, $date or next;
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};

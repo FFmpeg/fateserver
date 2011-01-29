@@ -11,7 +11,7 @@ BEGIN {
     $VERSION = 0.1;
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
-                  split_stats load_summary load_report
+                  split_stats load_summary load_report load_lastpass
                   doctype start end tag h1 span trow trowa trowh th td anchor
                   fail $fatedir $recent_age $ancient_age $hidden_age href
                   $gitweb/;
@@ -123,6 +123,21 @@ sub load_report {
     close R;
 
     return { header => $hdr, conf => $conf, recs => \@recs };
+}
+
+sub load_lastpass {
+    my ($slot) = @_;
+    my %lastpass;
+
+    if (open P, "$fatedir/$slot/lastpass") {
+        while (<P>) {
+            my ($test, $pdate, $prev) = split /:/;
+            $lastpass{$test} = { date => $pdate, rev => $prev };
+        }
+        close P;
+    }
+
+    return \%lastpass;
 }
 
 sub parse_date {

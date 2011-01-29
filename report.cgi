@@ -24,7 +24,6 @@ $$hdr{version} eq '0'              or fail 'Bad report version';
 
 my %pass;
 my %fail;
-my %lastpass;
 
 while (<R>) {
     my $rec = split_rec $_;
@@ -38,14 +37,7 @@ my $nfail = keys %fail;
 my $ntest = $npass + $nfail;
 
 my $rep = load_summary $req_slot, $req_time;
-
-if (open P, "$slotdir/lastpass") {
-    while (<P>) {
-        my ($test, $pdate, $prev) = split /:/;
-        $lastpass{$test} = { date => $pdate, rev => $prev };
-    }
-    close P;
-}
+my $lastpass = load_lastpass $req_slot;
 
 # main text
 
@@ -155,19 +147,19 @@ if ($nfail) {
         td "stderr",  class => 'toggle', onclick => "show_err('$test')";
         td $test;
         td $$rec{status}, class => 'errcode';
-        if ($lastpass{$n} and $gitweb) {
+        if ($$lastpass{$n} and $gitweb) {
             my ($old, $new);
-            $lastpass{$n}{rev} =~ /git-(.*)/ and $old = $1;
+            $$lastpass{$n}{rev} =~ /git-(.*)/ and $old = $1;
             $$hdr{rev}         =~ /git-(.*)/ and $new = $1;
             if ($old and $new) {
                 start 'td';
-                anchor $lastpass{$n}{rev}, href => "$gitweb;a=shortlog;h=$new;hp=$old";
+                anchor $$lastpass{$n}{rev}, href => "$gitweb;a=shortlog;h=$new;hp=$old";
                 end 'td';
             } else {
-                td $lastpass{$n}{rev};
+                td $$lastpass{$n}{rev};
             }
         } else {
-            td $lastpass{$n}? $lastpass{$n}{rev} : 'n / a';
+            td $$lastpass{$n}? $$lastpass{$n}{rev} : 'n / a';
         }
         end 'tr';
         start 'tr', id => "$test-diff", class => 'diff';

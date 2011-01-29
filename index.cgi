@@ -202,6 +202,8 @@ for my $rep (sort repcmp @reps) {
         my $report = load_report $$rep{slot}, $$rep{date};
         my @fail = grep $$_{status} ne '0', @{$$report{recs}};
         my $nfail = @fail;
+        my $lastpass = load_lastpass $$rep{slot};
+
         start 'tr', id => $slotid, class => 'slotfail';
         start 'td', colspan => 9;
         start 'table', class => 'minirep';
@@ -213,7 +215,9 @@ for my $rep (sort repcmp @reps) {
         end 'thead';
         start 'tbody';
         for (sort { $$a{name} cmp $$b{name} } @fail) {
-            start 'tr', class => 'alt hilight';
+            my $falert = $$rep{pdate} eq $$lastpass{$$_{name}}{date} ?
+              'alert' : '';
+            start 'tr', class => "alt hilight $falert";
             td $$_{name};
             td $$_{status}, class => 'errcode';
             end 'tr';

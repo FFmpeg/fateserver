@@ -81,6 +81,7 @@ mkdir $repdir
 gzip -9 *.log
 xz -8 report
 cp -p summary report.xz *.log.gz $repdir
+chmod 644 $repdir/*
 rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous
 ln -s $date $slotdir/latest

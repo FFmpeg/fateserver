@@ -149,6 +149,7 @@ for my $rep (sort repcmp @reps) {
         $ageclass = 'recent';
     } elsif ($age > $ancient_age) {
         $ageclass = 'ancient';
+        $alert = '';
     }
 
     start 'tr', class => "$ageclass $alert alt hilight";

@@ -120,6 +120,7 @@ th a:hover {
 #index .resright {
     border-left: none;
     border-right: solid 1px #eee;
+    width: 1em;
 }
 
 #index .toggle {

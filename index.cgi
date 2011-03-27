@@ -112,7 +112,7 @@ print <<EOF;
       var e = document.getElementById(id);
       if (e.style.display == 'table-row') {
           e.style.display = 'none';
-          arr.textContent = '\\u25ba'
+          arr.textContent = '\\u25b6'
       } else {
           e.style.display = 'table-row';
           arr.textContent = '\\u25bc'
@@ -208,7 +208,7 @@ for my $rep (sort repcmp @reps) {
     end 'td';
     start 'td', class => "$rclass resright";
     if ($npass < $ntest or $log) {
-        span '&#9658;', class => 'toggle', onclick => "toggle('$slotid', this)";
+        span '&#9654;', class => 'toggle', onclick => "toggle('$slotid', this)";
     }
     end 'td';
     end 'tr';

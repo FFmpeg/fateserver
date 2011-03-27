@@ -20,6 +20,7 @@ use warnings;
 use CGI qw/param/;
 use HTML::Entities;
 use FATE;
+use Time::Zone;
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;
@@ -149,7 +150,7 @@ for my $rep (sort repcmp @reps) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};
-    my $age  = time - $time;
+    my $age  = time - tz_local_offset() - $time;
     my $agestr = agestr $age, $time;
     my $ageclass = '';
     my $rtext;

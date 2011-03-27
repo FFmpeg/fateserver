@@ -19,6 +19,7 @@ use warnings;
 
 use CGI qw/param/;
 use FATE;
+use Time::Zone;
 
 my $slot = param 'slot';
 my $slotdir = "$fatedir/$slot";
@@ -53,7 +54,7 @@ for my $date ((sort { $b cmp $a } @reps)[0..49]) {
     my $ntest = $$rep{ntests};
     my $npass = $$rep{npass};
     my $time = parse_date $$rep{date};
-    my $age  = time - $time;
+    my $age  = time - tz_local_offset() - $time;
     my $rtext;
     my $rclass;
 

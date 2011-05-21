@@ -53,6 +53,7 @@ sub split_header {
         rev     => $hdr[4],
         status  => $hdr[5],
         errstr  => $hdr[6],
+        comment => $hdr[7],
     };
 }
 

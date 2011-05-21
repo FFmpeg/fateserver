@@ -129,7 +129,7 @@ h1 'FATE';
 start 'table', id => 'index', class => 'replist';
 start 'thead';
 start 'tr';
-start 'td', colspan => 9, id => 'failometer';
+start 'td', colspan => 10, id => 'failometer';
 span '&nbsp;', class => 'pass', style => "width: ${allpass}%" if $allpass;
 span '&nbsp;', class => 'warn', style => "width: ${warn}%"    if $warn;
 span '&nbsp;', class => 'fail', style => "width: ${allfail}%" if $allfail;
@@ -141,6 +141,7 @@ start 'th'; lsort 'Rev',      'rev';           end 'th';
 start 'th'; lsort 'Arch',     'arch';          end 'th';
 start 'th'; lsort 'OS',       'os';            end 'th';
 start 'th'; lsort 'Compiler', 'cc';            end 'th';
+start 'th'; lsort 'Comment',  'comment';       end 'th';
 start 'th', colspan => 2; lsort 'Warnings', 'nwarn'; end 'th';
 start 'th', colspan => 2; lsort 'Tests', 'npass'; end 'th';
 end 'tr';
@@ -181,6 +182,7 @@ for my $rep (sort repcmp @reps) {
     td $$rep{subarch};
     td $$rep{os};
     td $$rep{cc};
+    td $$rep{comment};
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
@@ -221,7 +223,7 @@ for my $rep (sort repcmp @reps) {
         my $lastpass = load_lastpass $$rep{slot};
 
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 9;
+        start 'td', colspan => 10;
         start 'table', class => 'minirep';
         start 'thead';
         start 'tr';
@@ -246,7 +248,7 @@ for my $rep (sort repcmp @reps) {
         trowa { style => 'display: none' }, '';
     } elsif ($log) {
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 9;
+        start 'td', colspan => 10;
         start 'pre', class => 'minilog';
         print encode_entities($log, '<>&"');
         end 'pre';

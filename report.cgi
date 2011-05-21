@@ -112,6 +112,7 @@ trow 'OS',            $$conf{os};
 trow 'Owner',         $owner if $owner;
 trow 'Compiler',      $$conf{cc};
 trow 'Configuration', $$conf{config};
+trow 'Comment',       $$hdr{comment};
 start 'tr';
 td   'Revision';
 if ($gitweb and $$hdr{rev} =~ /git-(.*)/) {

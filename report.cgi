@@ -115,9 +115,9 @@ trow 'Configuration', $$conf{config};
 trow 'Comment',       $$hdr{comment};
 start 'tr';
 td   'Revision';
-if ($gitweb and $$hdr{rev} =~ /git-(.*)/) {
+if ($gitweb and $$hdr{rev} =~ /(git-)?(.*)/) {
     start 'td';
-    anchor $$hdr{rev}, href => "$gitweb;a=commit;h=$1";
+    anchor $$hdr{rev}, href => "$gitweb;a=commit;h=$2";
     end 'td';
 } else {
     td $$hdr{rev};
@@ -171,8 +171,8 @@ if ($nfail) {
         td $$rec{status}, class => 'errcode';
         if ($$lastpass{$n} and $gitweb) {
             my ($old, $new);
-            $$lastpass{$n}{rev} =~ /git-(.*)/ and $old = $1;
-            $$hdr{rev}         =~ /git-(.*)/ and $new = $1;
+            $$lastpass{$n}{rev} =~ /(git-)?(.*)/ and $old = $2;
+            $$hdr{rev}          =~ /(git-)?(.*)/ and $new = $2;
             if ($old and $new) {
                 start 'td';
                 anchor $$lastpass{$n}{rev}, href => "$gitweb;a=shortlog;h=$new;hp=$old";

@@ -195,7 +195,8 @@ if ($nfail) {
 } elsif ($ntest) {
     start 'tr'; th 'All tests successful', colspan => 3, class => 'pass'; end;
 } else {
-    start 'tr'; th 'No tests were run',    colspan => 3, class => 'fail'; end;
+    my $class = $$hdr{status}? 'fail' : 'pass';
+    start 'tr'; th 'No tests were run',    colspan => 3, class => $class; end;
 }
 end 'table';
 

@@ -36,10 +36,10 @@ for my $slot (@slots) {
     next if time - parse_date($$rep{date}) > $hidden_age;
     $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     push @reps, $rep;
-    if ($$rep{npass} == 0) {
-        $allfail++;
-    } elsif ($$rep{npass} == $$rep{ntests}) {
+    if ($$rep{npass} == $$rep{ntests} and !$$rep{status}) {
         $allpass++;
+    } elsif ($$rep{npass} == 0) {
+        $allfail++;
     }
 
     if (my $prev = load_summary $slot, 'previous') {
@@ -186,6 +186,9 @@ for my $rep (sort repcmp @reps) {
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
+    } elsif (!$ntest and !$$rep{status}) {
+        $rtext  = "build only";
+        $rclass = $$rep{status}? 'fail' : 'pass';
     } else {
         $rtext  = $$rep{errstr};
         $rclass = 'fail';

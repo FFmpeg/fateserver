@@ -86,7 +86,7 @@ fi
 
 unset IFS
 
-nwarn=$(grep -Eci '\<warning\>' compile.log)
+nwarn=$(grep -Eci '\<warning\>' compile.log) || true
 
 echo "stats:$ntest:$npass:$nwarn" >>summary
 

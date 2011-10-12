@@ -55,7 +55,7 @@ $allpass = 100 * $allpass / @reps;
 $allfail = 100 * $allfail / @reps;
 my $warn = 100 - $allpass - $allfail;
 
-my @sort = ('subarch', 'os', 'cc', 'slot');
+my @sort = ('subarch', 'os', 'cc', 'comment', 'slot');
 my $sort = param('asort') || param('dsort');
 my $sdir = param('dsort') ? -1 : 1;
 defined $sort and unshift @sort, $sort eq 'arch'? 'subarch': $sort;

@@ -49,6 +49,10 @@ th {
 
 /* index and history listings */
 
+#index > tbody > tr > td, #history > tbody > tr > td {
+    height: 1.7em;
+}
+
 .replist {
     border: solid 1px #eee;
 }

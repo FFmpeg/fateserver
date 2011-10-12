@@ -108,6 +108,8 @@ th a:hover {
     text-decoration: underline;
 }
 
+#index .comment     { max-width: 13em; }
+
 #index .warnleft    { border-right: none; }
 #index .warnright   { border-left:  none; }
 #index .warnright a { text-decoration: none; }

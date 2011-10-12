@@ -182,7 +182,7 @@ for my $rep (sort repcmp @reps) {
     td $$rep{subarch};
     td $$rep{os};
     td $$rep{cc};
-    td $$rep{comment};
+    td $$rep{comment}, class => 'comment';
     if ($npass) {
         $rtext  = "$npass / $ntest";
         $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';

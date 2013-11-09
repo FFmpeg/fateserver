@@ -219,7 +219,7 @@ for my $rep (sort repcmp @reps) {
     end 'td';
     end 'tr';
     print "\n";
-    if ($npass < $ntest) {
+    if ($npass < $ntest && $ntest - $npass < 100) {
         my $report = load_report $$rep{slot}, $$rep{date};
         my @fail = grep $$_{status} ne '0', @{$$report{recs}};
         my $nfail = @fail;

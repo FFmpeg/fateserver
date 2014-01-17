@@ -77,6 +77,9 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
+            href => '//ffmpeg.org/default.css';
+tag 'link', rel  => 'stylesheet',
+            type => 'text/css',
             href => '/fate.css';
 print "<title>FATE: $$hdr{slot} $$hdr{rev}</title>\n";
 print <<EOF;
@@ -102,6 +105,10 @@ EOF
 end 'head';
 
 start 'body';
+start 'div', id => 'container';
+
+navbar;
+
 h1 "$$hdr{slot} $$hdr{rev}", id => 'title';
 
 start 'table', id => 'config';
@@ -200,5 +207,6 @@ if ($nfail) {
 }
 end 'table';
 
+end 'div';
 end 'body';
 end 'html';

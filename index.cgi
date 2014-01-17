@@ -105,6 +105,9 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
+            href => '//ffmpeg.org/default.css';
+tag 'link', rel  => 'stylesheet',
+            type => 'text/css',
             href => '/fate.css';
 print "<title>FATE</title>\n";
 print <<EOF;
@@ -124,6 +127,10 @@ EOF
 end 'head';
 
 start 'body';
+start 'div', id => 'container';
+
+navbar;
+
 h1 'FATE';
 
 start 'table', id => 'index', class => 'replist';
@@ -262,5 +269,6 @@ for my $rep (sort repcmp @reps) {
 }
 end 'tbody';
 end 'table';
+end 'div';
 end 'body';
 end 'html';

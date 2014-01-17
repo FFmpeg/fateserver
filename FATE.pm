@@ -27,7 +27,7 @@ BEGIN {
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   split_stats load_summary load_report load_lastpass
-                  doctype start end tag h1 span trow trowa trowh th td anchor
+                  doctype start end tag h1 span trow trowa trowh th td anchor navbar
                   fail $fatedir $recent_age $ancient_age $hidden_age href
                   $gitweb/;
 }
@@ -297,6 +297,31 @@ sub href {
         my $cgi = defined $href{log}? 'log': defined $href{time}? 'report': 'history';
         return sprintf '/%s.cgi?%s', $cgi, join '&amp;', map "$_=$href{$_}", keys %href;
     }
+}
+
+sub navbar {
+    # Copied from ffmpeg-web
+    print <<EOF;
+<div id="banner">
+<a href="//ffmpeg.org/index.html">
+<img src="//ffmpeg.org/ffmpeg-logo.png" alt="FFmpeg">
+</a>
+</div>
+<div id="navbar">
+<a href="//ffmpeg.org/index.html">News</a> |
+<a href="//ffmpeg.org/about.html">About</a> |
+<a href="//ffmpeg.org/download.html">Download</a> |
+<a href="//ffmpeg.org/documentation.html">Documentation</a> |
+<a href="//ffmpeg.org/bugreports.html">Bug Reports</a> |
+<a href="//ffmpeg.org/contact.html">Contact</a> |
+<a href="//ffmpeg.org/donations.html">Donations</a> |
+<a href="//ffmpeg.org/consulting.html">Consulting</a> |
+<a href="//ffmpeg.org/projects.html">Projects</a> |
+<a href="//ffmpeg.org/legal.html">Legal</a> |
+<a href="//ffmpeg.org/security.html">Security</a> |
+<a href="http://fate.ffmpeg.org">FATE</a>
+</div>
+EOF
 }
 
 sub fail {

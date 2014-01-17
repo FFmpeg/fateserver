@@ -37,11 +37,18 @@ tag 'meta', 'http-equiv' => "Content-Type",
             'content'    => "text/html; charset=utf-8";
 tag 'link', rel  => 'stylesheet',
             type => 'text/css',
+            href => '//ffmpeg.org/default.css';
+tag 'link', rel  => 'stylesheet',
+            type => 'text/css',
             href => '/fate.css';
 print "<title>FATE: $slot</title>\n";
 end 'head';
 
 start 'body';
+start 'div', id => 'container';
+
+navbar;
+
 h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
@@ -86,5 +93,6 @@ for my $date ((sort { $b cmp $a } @reps)[0..49]) {
 }
 end 'tbody';
 end 'table';
+end 'div';
 end 'body';
 end 'html';

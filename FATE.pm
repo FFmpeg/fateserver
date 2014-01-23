@@ -32,14 +32,14 @@ BEGIN {
                   $gitweb/;
 }
 
-our $fatedir;
+our $fatedir = "/var/www/fateweb";
 our $recent_age  = 3600;
 our $ancient_age = 3 * 86400;
 our $hidden_age  = 30 * 86400;
 our $pretty_links = 0;
 our $gitweb;
 
-require "$ENV{FATEWEB_CONFIG}";
+#require "$ENV{FATEWEB_CONFIG}";
 
 # report utils
 

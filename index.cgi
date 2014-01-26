@@ -131,6 +131,8 @@ start 'div', id => 'container';
 
 navbar;
 
+start 'div', id => 'body';
+
 h1 'FATE';
 
 start 'table', id => 'index', class => 'replist';
@@ -269,6 +271,7 @@ for my $rep (sort repcmp @reps) {
 }
 end 'tbody';
 end 'table';
+end 'div';
 end 'div';
 end 'body';
 end 'html';

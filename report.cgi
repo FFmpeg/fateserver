@@ -109,6 +109,8 @@ start 'div', id => 'container';
 
 navbar;
 
+start 'div', id => 'body';
+
 h1 "$$hdr{slot} $$hdr{rev}", id => 'title';
 
 start 'table', id => 'config';
@@ -207,6 +209,7 @@ if ($nfail) {
 }
 end 'table';
 
+end 'div';
 end 'div';
 end 'body';
 end 'html';

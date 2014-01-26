@@ -49,6 +49,8 @@ start 'div', id => 'container';
 
 navbar;
 
+start 'div', id => 'body';
+
 h1 "Report history for $slot";
 
 start 'table', id => 'history', class => 'replist';
@@ -93,6 +95,7 @@ for my $date ((sort { $b cmp $a } @reps)[0..49]) {
 }
 end 'tbody';
 end 'table';
+end 'div';
 end 'div';
 end 'body';
 end 'html';

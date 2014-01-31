@@ -49,6 +49,7 @@ th {
 
 .replist {
     border: solid 1px #eee;
+    width: 100%;
 }
 
 .replist tr {

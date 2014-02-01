@@ -181,7 +181,7 @@ for my $rep (sort repcmp @reps) {
     start 'td';
     anchor $agestr, href => href slot => $$rep{slot};
     end 'td';
-    if ($gitweb and $$rep{rev} =~ /(git-)?(.*)/) {
+    if ($gitweb and $$rep{rev} =~ /(N-)?(.*)/) {
         start 'td';
         anchor $$rep{rev}, href => "$gitweb;a=commit;h=$2";
         end 'td';

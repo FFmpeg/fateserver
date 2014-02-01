@@ -69,7 +69,7 @@ for my $date ((sort { $b cmp $a } @reps)[0..49]) {
 
     start 'tr', class => 'alt hilight';
     td agestr $age, $time;
-    if ($gitweb and $$rep{rev} =~ /(git-)?(.*)/) {
+    if ($gitweb and $$rep{rev} =~ /(N-)?(.*)/) {
         start 'td';
         anchor $$rep{rev}, href => "$gitweb;a=commit;h=$2";
         end 'td';

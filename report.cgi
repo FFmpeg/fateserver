@@ -151,7 +151,11 @@ start 'table', id => 'tests', class => 'replist';
 if ($nfail) {
     start 'thead';
     start 'tr', class => 'fail';
-    th "$nfail failed tests", colspan => 3;
+    if ($nfail eq 1) {
+        th "$nfail failed test", colspan => 3;
+    } else {
+        th "$nfail failed tests", colspan => 3;
+    }
     th 'Status', class => 'errcode';
     th 'Last good rev', class => 'lastpass';
     end 'tr';

@@ -239,7 +239,11 @@ for my $rep (sort repcmp @reps) {
         start 'table', class => 'minirep';
         start 'thead';
         start 'tr';
-        th "$nfail failed tests";
+        if ($nfail eq 1) {
+            th "$nfail failed test";
+        } else {
+            th "$nfail failed tests";
+        }
         th 'Status', class => 'errcode';
         end 'tr';
         end 'thead';

@@ -304,7 +304,7 @@ sub navbar {
     print <<EOF;
 <div id="banner">
 <a href="//ffmpeg.org/index.html">
-<img src="//ffmpeg.org/ffmpeg-logo.png" alt="FFmpeg">
+<img src="//ffmpeg.org/ffmpeg-logo.png" alt="FFmpeg" />
 </a>
 </div>
 <div id="navbar">

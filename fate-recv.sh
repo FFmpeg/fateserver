@@ -41,6 +41,7 @@ test -n "$date" && test -n "$slot" || die "Invalid report header"
 slotdir=$FATEDIR/$slot
 
 if [ -d "$slotdir" ]; then
+    echo "$FATE_USER" >"$slotdir/owner"
     owner=$(cat "$slotdir/owner")
     test "$owner" = "$FATE_USER" || die "Slot $slot owned by somebody else"
 else

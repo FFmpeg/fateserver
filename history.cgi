@@ -20,11 +20,14 @@ use warnings;
 use CGI qw/param/;
 use FATE;
 use Time::Zone;
+use HTML::Entities;
 
 my $slot = param 'slot';
 my $slotdir = "$fatedir/$slot";
 
-opendir D, $slotdir or fail "Slot $slot not found";
+my $slot_escaped = encode_entities $slot;
+
+opendir D, $slotdir or fail "Slot $slot_escaped not found";
 my @reps = grep { /^[0-9]/ and -d "$slotdir/$_" } readdir D;
 close D;
 

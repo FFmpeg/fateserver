@@ -51,6 +51,8 @@ for my $slot (@slots) {
     }
 }
 
+@reps or fail 'No data in $fatedir';
+
 $allpass = 100 * $allpass / @reps;
 $allfail = 100 * $allfail / @reps;
 my $warn = 100 - $allpass - $allfail;

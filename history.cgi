@@ -31,6 +31,8 @@ opendir D, $slotdir or fail "Slot $slot_escaped not found";
 my @reps = grep { /^[0-9]/ and -d "$slotdir/$_" } readdir D;
 close D;
 
+@reps or fail "No data in $fatedir";
+
 print "Content-type: text/html\r\n\r\n";
 
 doctype;

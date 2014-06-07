@@ -77,10 +77,9 @@ sub repcmp {
 };
 
 (my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
-my $params = join '&', map param($_), grep $_ !~ 'sort', param;
-$params .= '&' if $params;
-
 sub lsort {
+    my $params = join '&', map param($_), grep $_ !~ 'sort', param;
+    $params .= '&' if $params;
     my ($text, $key, $p) = @_;
     if ($sort eq $key) {
         $p = param('asort') ? 'dsort' : 'asort';

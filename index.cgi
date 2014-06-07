@@ -21,6 +21,17 @@ use CGI qw/param/;
 use HTML::Entities;
 use FATE;
 use Time::Zone;
+use URI::Escape;
+use Data::Dumper;
+
+# Format for /?query= : /?query=type:value//type:value// (URI encoded).
+# Trailing // does not matter (i.e. may be added).
+# @queries contains an array of 'type:value' strings.
+# Every member of @queries can be further parsed with another simple
+# split(/:/, $this_query, 2);
+my @queries = split(/\/\//, uri_unescape param 'query') if (param 'query');
+
+(my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;
@@ -34,6 +45,15 @@ for my $slot (@slots) {
     next if -e "$fatedir/$slot/hidden";
     my $rep = load_summary $slot, 'latest' or next;
     next if time - parse_date($$rep{date}) > $hidden_age;
+
+    my $not_matched = 0;
+
+    for my $this_query (@queries) {
+        my ($type, $text) = split(/:/, $this_query, 2);
+        $not_matched = 1 if ($$rep{$type} ne $text);
+    }
+    next if $not_matched;
+
     $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     push @reps, $rep;
     if ($$rep{npass} == $$rep{ntests} and !$$rep{status}) {
@@ -51,7 +71,9 @@ for my $slot (@slots) {
     }
 }
 
-@reps or fail 'No data in $fatedir';
+@reps or fail @queries ? 'No items matching search criteria. ' .
+                         "<a href=\"$uri\">Clear all search criteria.</a>" :
+                         'No data in $fatedir.';
 
 $allpass = 100 * $allpass / @reps;
 $allfail = 100 * $allfail / @reps;
@@ -76,7 +98,6 @@ sub repcmp {
     return $r;
 };
 
-(my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
 sub lsort {
     my $params = join '&', map param($_), grep $_ !~ 'sort', param;
     $params .= '&' if $params;
@@ -88,6 +109,34 @@ sub lsort {
         $p = 'asort';
     }
     anchor $text, href => "$uri?$params$p=$key";
+}
+
+sub category {
+    my ($category, $rep) = @_;
+    my $head_printed = 0;
+
+    # $params contains parameters else than query.
+    my $params = map param($_), grep $_ !~ 'query', param;
+    $params = $params ? $params : '';  # Prevents $params eq 0
+    my $head = $params ? '&' : '' . 'query=';
+
+    if (@queries) {
+        for my $this_query (@queries) {
+            my ($type, $text) = split(/:/, $this_query, 2);
+            if ($type ne $category) {
+                $params .= $head if (!$head_printed);
+                $params .= $this_query . '//';
+                $head_printed = 1;
+            }
+        }
+    }
+    $params .= $head if (!$head_printed);
+    $params .= "$category:" . uri_escape_utf8 "$$rep{$category}" . '//';
+    $head_printed = 1;                 # for the sake of completeness
+
+    start 'td';
+    anchor $$rep{$category}, href => "$uri?$params";
+    end 'td';
 }
 
 print "Content-type: text/html\r\n";
@@ -135,6 +184,17 @@ navbar;
 start 'div', id => 'body';
 
 h1 'FATE';
+
+if (@queries) {
+    start 'p';
+    print 'Search patterns: ';
+    for my $this_query (@queries) {
+        my ($type, $text) = split(/:/, $this_query, 2);
+        print "$type: $text; ";
+    }
+    anchor 'clear all.', href => "$uri";
+    end 'p';
+}
 
 start 'table', id => 'index', class => 'replist';
 start 'thead';
@@ -189,9 +249,10 @@ for my $rep (sort repcmp @reps) {
     } else {
         td $$rep{rev};
     }
-    td $$rep{subarch};
-    td $$rep{os};
-    td $$rep{cc};
+
+    category 'subarch', $rep;
+    category 'os', $rep;
+    category 'cc', $rep;
     td $$rep{comment}, class => 'comment';
     if ($npass) {
         $rtext  = "$npass / $ntest";

@@ -22,7 +22,6 @@ use HTML::Entities;
 use FATE;
 use Time::Zone;
 use URI::Escape;
-use Data::Dumper;
 
 # Format for /?query= : /?query=type:value//type:value// (URI encoded).
 # Trailing // does not matter (i.e. may be added).

@@ -46,14 +46,13 @@ for my $slot (@slots) {
     next if time - parse_date($$rep{date}) > $hidden_age;
 
     my $not_matched = 0;
-
+    $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     for my $this_query (@queries) {
         my ($type, $text) = split(/:/, $this_query, 2);
         $not_matched = 1 if ($$rep{$type} ne $text);
     }
     next if $not_matched;
 
-    $$rep{subarch} = $$rep{arch} if not $$rep{subarch};
     push @reps, $rep;
     if ($$rep{npass} == $$rep{ntests} and !$$rep{status}) {
         $allpass++;

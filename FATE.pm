@@ -76,6 +76,7 @@ sub split_stats {
     return {
         ntests => int $st[1],
         npass  => int $st[2],
+        nfail  => int $st[1] - int $st[2],
         nwarn  =>     $st[3],
     };
 }
@@ -115,7 +116,8 @@ sub load_summary {
         $ntests++;
     }
     close R;
-    return { %$hdr, %$conf, ntests => $ntests, npass => $npass };
+    return { %$hdr, %$conf, ntests => $ntests, npass => $npass,
+             nfail => $ntests - $npass };
 }
 
 sub load_report {

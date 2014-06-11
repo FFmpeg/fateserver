@@ -64,9 +64,8 @@ for my $slot (@slots) {
     }
 
     if (my $prev = load_summary $slot, 'previous') {
-        my $nfail = $$rep{ntests}  - $$rep{npass};
         my $pfail = $$prev{ntests} - $$prev{npass};
-        $$rep{alert} = $$rep{ntests} && $nfail <=> $pfail;
+        $$rep{alert} = $$rep{ntests} && $$rep{nfail} <=> $pfail;
         $$rep{dwarn} = $$rep{nwarn} <=> $$prev{nwarn};
         $$rep{pdate} = $$prev{date};
     }
@@ -309,7 +308,6 @@ for my $rep (sort repcmp @reps) {
     if ($npass < $ntest && $ntest - $npass < 100) {
         my $report = load_report $$rep{slot}, $$rep{date};
         my @fail = grep $$_{status} ne '0', @{$$report{recs}};
-        my $nfail = @fail;
         my $lastpass = load_lastpass $$rep{slot};
 
         start 'tr', id => $slotid, class => 'slotfail';
@@ -317,10 +315,10 @@ for my $rep (sort repcmp @reps) {
         start 'table', class => 'minirep';
         start 'thead';
         start 'tr';
-        if ($nfail eq 1) {
-            th "$nfail failed test";
+        if ($$rep{nfail} eq 1) {
+            th "1 failed test";
         } else {
-            th "$nfail failed tests";
+            th "$$rep{nfail} failed tests";
         }
         th 'Status', class => 'errcode';
         end 'tr';

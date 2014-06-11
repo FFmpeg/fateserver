@@ -30,6 +30,9 @@ use URI::Escape;
 # split(/:/, $this_query, 2);
 my @queries = split(/\/\//, uri_unescape param 'query') if (param 'query');
 
+my $sort = param('sort');
+$sort    = $sort eq 'arch' ? 'subarch': $sort;
+
 (my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
@@ -78,9 +81,8 @@ $allfail = 100 * $allfail / @reps;
 my $warn = 100 - $allpass - $allfail;
 
 my @sort = ('subarch', 'os', 'cc', 'comment', 'slot');
-my $sort = param('sort');
 my $sdir = 1; # default to ascending sorting
-defined $sort and unshift @sort, $sort eq 'arch'? 'subarch': $sort;
+defined $sort and unshift @sort, $sort;
 $sort ||= $sort[0];
 
 sub nscmp {

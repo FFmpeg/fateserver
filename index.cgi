@@ -78,8 +78,8 @@ $allfail = 100 * $allfail / @reps;
 my $warn = 100 - $allpass - $allfail;
 
 my @sort = ('subarch', 'os', 'cc', 'comment', 'slot');
-my $sort = param('asort') || param('dsort');
-my $sdir = param('dsort') ? -1 : 1;
+my $sort = param('sort');
+my $sdir = 1; # default to ascending sorting
 defined $sort and unshift @sort, $sort eq 'arch'? 'subarch': $sort;
 $sort ||= $sort[0];
 
@@ -91,6 +91,10 @@ sub nscmp {
 sub repcmp {
     my $r;
     for my $s (@sort) {
+        if ($s =~ /^desc/) {
+            $s =~ s/^desc//;
+            $sdir = -1;
+        }
         last if $r = $sdir * nscmp $$a{$s}, $$b{$s};
     }
     return $r;
@@ -104,14 +108,17 @@ sub lsort {
         $params .= "$thisparam=" . param($thisparam);
     }
     $params .= '&' if $params;
-    my ($text, $key, $p) = @_;
-    if ($sort eq $key) {
-        $p = param('asort') ? 'dsort' : 'asort';
+    my ($text, $key) = @_;
+
+    if ($sort eq $key) {                           # $sort = $key
+        if ($key =~ /^desc/) {                     # $sort = desc*
+            $key =~ s/^desc//;
+        } else {                                   # $sort = *
+            $key = "desc$key";
+        }
     }
-    if (!$p) {
-        $p = 'asort';
-    }
-    anchor $text, href => "$uri?$params$p=$key";
+
+    anchor $text, href => "$uri?${params}sort=$key";
 }
 
 sub category {
@@ -213,7 +220,7 @@ span '&nbsp;', class => 'fail', style => "width: ${allfail}%" if $allfail;
 end 'td';
 end 'tr';
 start 'tr';
-start 'th'; lsort 'Time',     'date', 'dsort'; end 'th';
+start 'th'; lsort 'Time',     'descdate';      end 'th';
 start 'th'; lsort 'Rev',      'rev';           end 'th';
 start 'th'; lsort 'Arch',     'arch';          end 'th';
 start 'th'; lsort 'OS',       'os';            end 'th';

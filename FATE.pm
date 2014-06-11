@@ -107,15 +107,15 @@ sub load_summary {
     open R, '-|', "unxz -c $repdir/report.xz" or return;
     my $hdr  = split_header scalar <R> or return;
     my $conf = split_config scalar <R> or return;
-    my $ntest = 0;
+    my $ntests = 0;
     my $npass = 0;
     while (<R>) {
         my $rec = split_rec $_;
         $$rec{status} == 0 and $npass++;
-        $ntest++;
+        $ntests++;
     }
     close R;
-    return { %$hdr, %$conf, ntests => $ntest, npass => $npass };
+    return { %$hdr, %$conf, ntests => $ntests, npass => $npass };
 }
 
 sub load_report {

@@ -111,14 +111,23 @@ sub lsort {
     $params .= '&' if $params;
     my ($text, $key) = @_;
 
-    if ($sort eq $key) {                           # $sort = $key
-        if ($key =~ /^desc/) {                     # $sort = desc*
-            $key =~ s/^desc//;
-        } else {                                   # $sort = *
-            $key = "desc$key";
+    my $newkey = '';
+    if ($sort eq $key) {                           # $key     = $sort
+        for my $thiskey (split /\/\//, $key) {
+            if ($thiskey =~ /^desc/) {             # $thiskey = desc*
+                $thiskey =~ s/^desc//;
+            } else {                               # $thiskey = *
+                $thiskey = "desc$thiskey";
+            }
+            if ($newkey eq '') {
+                $newkey = $thiskey;
+            } else {
+                $newkey .= "//$thiskey";
+            }
         }
     }
 
+    $key = $newkey if $newkey ne '';
     anchor $text, href => "$uri?${params}sort=$key";
 }
 

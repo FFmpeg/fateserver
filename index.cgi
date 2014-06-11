@@ -81,7 +81,7 @@ my $warn = 100 - $allpass - $allfail;
 
 my @sort = ('subarch', 'os', 'cc', 'comment', 'slot');
 my $sdir = 1; # default to ascending sorting
-defined $sort and unshift @sort, $sort;
+defined $sort and unshift @sort, split /\/\//, $sort;
 $sort ||= $sort[0];
 
 sub nscmp {

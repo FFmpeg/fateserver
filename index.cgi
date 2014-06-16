@@ -97,7 +97,12 @@ sub repcmp {
 };
 
 sub lsort {
-    my $params = join '&', map param($_), grep $_ !~ 'sort', param;
+    my $params = '';
+    for my $thisparam (param) {
+        next if $thisparam =~ 'sort';
+        $params .= '&' if $params ne '';
+        $params .= "$thisparam=" . param($thisparam);
+    }
     $params .= '&' if $params;
     my ($text, $key, $p) = @_;
     if ($sort eq $key) {
@@ -113,10 +118,14 @@ sub category {
     my ($category, $rep) = @_;
     my $head_printed = 0;
 
-    # $params contains parameters else than query.
-    my $params = map param($_), grep $_ !~ 'query', param;
-    $params = $params ? $params : '';  # Prevents $params eq 0
-    my $head = $params ? '&' : '' . 'query=';
+    # $params will contain parameters else than query, if any, in HTTP format.
+    my $params = '';
+    for my $thisparam (param) {
+        next if $thisparam eq 'query';
+        $params .= '&' if $params ne '';
+        $params .= "$thisparam=" . param($thisparam);
+    }
+    my $head = ($params ? '&' : '') . 'query=';
 
     if (@queries) {
         for my $this_query (@queries) {

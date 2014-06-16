@@ -198,7 +198,7 @@ table.minirep {
 
 .diff {
     font-family: monospace;
-    white-space: pre;
+    white-space: pre-wrap;
     display: none;
 }
 

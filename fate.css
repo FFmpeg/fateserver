@@ -52,6 +52,11 @@ th {
     width: 100%;
 }
 
+.replist a {
+    color: inherit;
+    text-decoration: none;
+}
+
 .replist tr {
     border-left:  solid 1px #eee;
     border-right: solid 1px #eee;

@@ -70,17 +70,7 @@ if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
     print "\r\n";
 }
 
-doctype;
-start 'html', xmlns => "http://www.w3.org/1999/xhtml";
-start 'head';
-tag 'meta', 'http-equiv' => "Content-Type",
-            'content'    => "text/html; charset=utf-8";
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '//ffmpeg.org/default.css';
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '/fate.css';
+head1;
 print "<title>FATE: $$hdr{slot} $$hdr{rev}</title>\n";
 print <<EOF;
 <script type="text/javascript">
@@ -102,16 +92,9 @@ print <<EOF;
   }
 </script>
 EOF
-end 'head';
-
-start 'body';
-start 'div', id => 'container';
-
-navbar;
-
-start 'div', id => 'body';
-
-h1 "$$hdr{slot} $$hdr{rev}", id => 'title';
+head2;
+print "$$hdr{slot} $$hdr{rev}";
+head3;
 
 start 'table', id => 'config';
 trow 'Architecture',  $$conf{arch};
@@ -120,7 +103,7 @@ trow 'CPU',           $$conf{cpu};
 trow 'OS',            $$conf{os};
 trow 'Owner',         $owner if $owner;
 trow 'Compiler',      $$conf{cc};
-trow 'Configuration', $$conf{config};
+trow 'Configuration', '<code>' . $$conf{config} . '</code>';
 trow 'Comment',       $$hdr{comment};
 start 'tr';
 td   'Revision';
@@ -147,7 +130,8 @@ end 'td';
 end 'tr';
 end;
 
-start 'table', id => 'tests', class => 'replist';
+start 'div', class => 'table-responsive';
+start 'table', id => 'tests', class => 'table';
 if ($nfail) {
     start 'thead';
     start 'tr', class => 'fail';
@@ -197,23 +181,23 @@ if ($nfail) {
             td $$lastpass{$n}? $$lastpass{$n}{rev} : 'n / a';
         }
         end 'tr';
+        trowa { style => 'display: none' }, ''; # nee
         start 'tr', id => "$test-diff", class => 'diff';
-        td $diff, colspan => 5;
+        td "<pre>$diff</pre>", colspan => 5;
         end 'tr';
+        trowa { style => 'display: none' }, '';
         start 'tr', id => "$test-err",  class => 'diff';
-        td $err,  colspan => 5;
+        td "<pre>$err</pre>",  colspan => 5;
         end 'tr';
     }
     end 'tbody';
 } elsif ($ntest) {
-    start 'tr'; th 'All tests successful', colspan => 3, class => 'pass'; end;
+    start 'tr', class => 'pass'; th 'All tests successful', colspan => 3; end;
 } else {
     my $class = $$hdr{status}? 'fail' : 'pass';
-    start 'tr'; th 'No tests were run',    colspan => 3, class => $class; end;
+    start 'tr', class => $class; th 'No tests were run',    colspan => 3; end;
 }
 end 'table';
+end 'div';
 
-end 'div';
-end 'div';
-end 'body';
-end 'html';
+footer;

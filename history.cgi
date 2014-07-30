@@ -35,30 +35,14 @@ close D;
 
 print "Content-type: text/html\r\n\r\n";
 
-doctype;
-start 'html', xmlns => "http://www.w3.org/1999/xhtml";
-start 'head';
-tag 'meta', 'http-equiv' => "Content-Type",
-            'content'    => "text/html; charset=utf-8";
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '//ffmpeg.org/default.css';
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '/fate.css';
+head1;
 print "<title>FATE: $slot</title>\n";
-end 'head';
+head2;
+print "Report history for $slot";
+head3;
 
-start 'body';
-start 'div', id => 'container';
-
-navbar;
-
-start 'div', id => 'body';
-
-h1 "Report history for $slot";
-
-start 'table', id => 'history', class => 'replist';
+start 'div', class => 'table-responsive';
+start 'table', id => 'history', class => 'replist table';
 start 'thead';
 trowh 'Time', 'Rev', 'Arch', 'OS', 'Compiler', 'Warnings', 'Tests';
 end 'thead';
@@ -104,6 +88,4 @@ for my $date ((sort { $b cmp $a } @reps)[0..49]) {
 end 'tbody';
 end 'table';
 end 'div';
-end 'div';
-end 'body';
-end 'html';
+footer;

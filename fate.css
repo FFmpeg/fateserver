@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
+ * Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
  * purpose with or without fee is hereby granted, provided that the above
@@ -14,41 +15,38 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
-table {
-    border-collapse: collapse;
-}
-
-th {
-    background: #ccc;
-    padding: 0.5em;
-}
-
 .recent  { font-weight: bold; }
 .ancient { color: #888; }
 
-.fail { background: #e44; }
-.pass { background: #5e5; }
-.warn { background: #ff3; }
+.fail {
+    background: #d9534f !important;
+    color: white;
+}
+.pass {
+    background: #5cb85c !important;
+    color: white;
+}
+.warn {
+    background: #ecd046 !important;
+    color: black;
+}
 
-.alert   { color: #911; }
+.fate-alert { color: #911; }
 .rejoice { color: #191; }
 
 #failometer {
     padding: 0;
 }
 
-#failometer span {
-    display: inline-block;
+#failometer .progress {
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-bottom: inherit;
 }
 
 /* index and history listings */
 
-#index > tbody > tr > td, #history > tbody > tr > td {
-    height: 1.7em;
-}
-
 .replist {
-    border: solid 1px #eee;
     width: 100%;
 }
 
@@ -57,54 +55,8 @@ th {
     text-decoration: none;
 }
 
-.replist tr {
-    border-left:  solid 1px #eee;
-    border-right: solid 1px #eee;
-}
-
-.replist th {
-    border: solid 1px #eee;
-}
-
-.replist td {
-    border: solid 1px #eee;
-    padding: 0 0.5em;
-}
-
-.replist tr.alt:nth-child(odd) {
-    background: white;
-}
-
-.replist tr.alt:nth-child(even) {
-    background: #eee;
-}
-
-.replist tr.alt:nth-child(odd) td {
-    border-color: #eee;
-}
-
-.replist tr.alt:nth-child(even) td {
-    border-color: white;
-}
-
-.replist tr.alt:nth-child(even) td:first-child {
-    border-left: solid 1px #eee;
-}
-
-.replist tr:nth-child(n) td:last-child {
-    border-right: solid 1px #eee;
-}
-
-.replist tr.hilight:hover {
-    background: #ddf;
-}
-
-.replist tr.hilight:hover td {
-    border-color: white;
-}
-
 th a:link, th a:visited {
-    color: black;
+    color: inherit;
     text-decoration: none;
 }
 
@@ -114,33 +66,12 @@ th a:hover {
 
 #index .comment     { max-width: 13em; }
 
-#index .warnleft    { border-right: none; }
-#index .warnright   { border-left:  none; }
-#index .warnright a { text-decoration: none; }
-
-#index .resleft {
-    border-left: solid 1px white;
-    border-right: none;
-}
-
-#index .resright {
-    border-left: none;
-    border-right: solid 1px #eee;
-    width: 1em;
-}
-
 #index .toggle {
     cursor: pointer;
-    text-align: center;
-    color: black;
 }
 
 tr.slotfail {
     display: none;
-}
-
-tr.slotfail > td {
-    padding: 0.5em;
 }
 
 table.minirep {
@@ -150,12 +81,6 @@ table.minirep {
 .minirep th {
     padding: 0 0.5em;
     text-align: left;
-}
-
-.minilog {
-    border: solid 1px #eee;
-    padding: 0.5em;
-    margin: 0;
 }
 
 /* config summary */
@@ -169,17 +94,19 @@ table.minirep {
 /* test listing */
 
 #tests {
-    border: solid 1px #eee;
     margin-top: 2em;
     width: 100%;
 }
 
-#tests th {
-    text-align: left;
+#tests .fail th {
+    background: #d9534f;
+    border-bottom: 2px solid #fcc;
 }
 
-#tests .fail th {
-    background: #e44;
+#tests .pass th {
+    background: #5cb85c;
+    border-bottom: 2px solid #9f9;
+    border-top: 0;
 }
 
 #tests .toggle {
@@ -197,35 +124,26 @@ table.minirep {
     width: 12em;
 }
 
-#tests tr:only-child th {
-    border: solid 1px #eee;
-}
-
 .diff {
-    font-family: monospace;
-    white-space: pre-wrap;
     display: none;
 }
 
-.diff-new {
+.diff-new, .diff-old, .diff-hnk {
     font-weight: bold;
-    color: #262;
 }
 
-.diff-old {
-    font-weight: bold;
-    color: #622;
+.diff-new, .diff-add {
+    color: #4cae4c;
+}
+
+.diff-old, .diff-del {
+    color: #d9534f;
 }
 
 .diff-hnk {
-    font-weight: bold;
     color: #226;
 }
 
-.diff-add {
-    color: #262;
-}
-
-.diff-del {
-    color: #622;
+code, pre {
+    white-space: pre-wrap;
 }

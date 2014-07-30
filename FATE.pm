@@ -27,7 +27,8 @@ BEGIN {
     @ISA     = qw/Exporter/;
     @EXPORT  = qw/split_header split_config split_rec parse_date agestr
                   split_stats load_summary load_report load_lastpass
-                  doctype start end tag h1 span trow trowa trowh th td anchor navbar
+                  start end tag h1 span trow trowa trowh th td anchor
+                  head1 head2 head3 footer
                   fail $fatedir $recent_age $ancient_age $hidden_age href
                   $gitweb/;
 }
@@ -199,10 +200,6 @@ $block_tags{$_} = 1 for @block_tags;
 
 my @tags;
 
-sub doctype {
-    print q{<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">}, "\n";
-}
-
 sub opentag {
     my ($tag, %attrs) = @_;
     print qq{<$tag};
@@ -301,35 +298,116 @@ sub href {
     }
 }
 
-sub navbar {
+sub head1 {
+    print <<EOF;
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+EOF
+}
+
+sub head2 {
     # Copied from ffmpeg-web
     print <<EOF;
-<div id="banner">
-<a href="//ffmpeg.org/index.html">
-<img src="//ffmpeg.org/ffmpeg-logo.png" alt="FFmpeg" />
-</a>
-</div>
-<div id="navbar">
-<a href="//ffmpeg.org/index.html">News</a> |
-<a href="//ffmpeg.org/about.html">About</a> |
-<a href="//ffmpeg.org/download.html">Download</a> |
-<a href="//ffmpeg.org/documentation.html">Documentation</a> |
-<a href="//ffmpeg.org/bugreports.html">Bug Reports</a> |
-<a href="//ffmpeg.org/contact.html">Contact</a> |
-<a href="//ffmpeg.org/donations.html">Donations</a> |
-<a href="//ffmpeg.org/consulting.html">Consulting</a> |
-<a href="//ffmpeg.org/projects.html">Projects</a> |
-<a href="//ffmpeg.org/legal.html">Legal</a> |
-<a href="//ffmpeg.org/security.html">Security</a> |
-<a href="http://fate.ffmpeg.org">FATE</a>
-</div>
+    <link rel="stylesheet" href="https://ffmpeg.org/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://ffmpeg.org/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://ffmpeg.org/css/simple-sidebar.css" />
+    <link rel="stylesheet" href="https://ffmpeg.org/css/style.min.css" />
+    <link rel="stylesheet" href="/fate.css" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <!--[if lt IE 9]>
+      <script src="https://ffmpeg.org/js/html5shiv.min.js"></script>
+      <script src="https://ffmpeg.org/js/respond.min.js"></script>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="https://ffmpeg.org/favicon.ico" />
+  </head>
+  <body>
+
+    <div id="wrapper">
+
+      <nav id="sidebar-wrapper">
+        <ul class="sidebar-nav">
+          <li class="sidebar-brand"><a href=".">
+              <img src="https://ffmpeg.org/img/ffmpeg3d_white_20.png" alt="FFmpeg" />
+              FFmpeg</a>
+          </li>
+          <li><a href="https://ffmpeg.org/about.html">About</a></li>
+          <li><a href="https://ffmpeg.org/index.html#news">News</a></li>
+          <li><a href="https://ffmpeg.org/download.html">Download</a></li>
+          <li><a href="https://ffmpeg.org/documentation.html">Documentation</a></li>
+          <li><a href="https://ffmpeg.org/contact.html#MailingLists">Community</a>
+            <ul>
+              <li><a href="https://ffmpeg.org/contact.html#MailingLists">Mailing Lists</a></li>
+              <li><a href="https://ffmpeg.org/contact.html#IRCChannels">IRC</a></li>
+              <li><a href="https://ffmpeg.org/contact.html#Forums">Forums</a></li>
+              <li><a href="https://ffmpeg.org/bugreports.html">Bug Reports</a></li>
+              <li><a href="http://trac.ffmpeg.org">Wiki</a></li>
+            </ul>
+          </li>
+          <li><a href="#">Developers</a>
+            <ul>
+              <li><a href="https://ffmpeg.org/download.html#get-sources">Source Code</a>
+              <li><a href="/">FATE</a></li>
+              <li><a href="http://coverage.ffmpeg.org">Code Coverage</a></li>
+            </ul>
+          </li>
+          <li><a href="#">More</a>
+            <ul>
+              <li><a href="https://ffmpeg.org/donations.html">
+                  Donate<span style="color: #e55; font-size: 0.8em; margin-left: -10px"><i class="fa fa-heart"></i></span></a></li>
+              <li><a href="https://ffmpeg.org/consulting.html">Hire Developers</a></li>
+              <li><a href="https://ffmpeg.org/contact.html">Contact</a></li>
+              <li><a href="https://ffmpeg.org/security.html">Security</a></li>
+              <li><a href="https://ffmpeg.org/legal.html">Legal</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+
+      <div id="page-content-wrapper">
+        <header class="content-header">
+          <h1>
+            <a id="menu-toggle" href="#" class="btn btn-success"><i class="fa fa-reorder"></i></a>
+EOF
+}
+
+sub head3 {
+    print <<EOF;
+          </h1>
+        </header>
+      <div class="page-content inset">
+EOF
+}
+
+sub footer {
+    print <<EOF
+        </div> <!-- page-content-inset -->
+      </div> <!-- page-content-wrapper -->
+    </div> <!-- wrapper -->
+
+    <script src="https://ffmpeg.org/js/jquery.min.js"></script>
+    <script src="https://ffmpeg.org/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript for the Menu Toggle -->
+    <script>
+      \$("#menu-toggle").click(function(e) {
+          e.preventDefault();
+          \$("#wrapper").toggleClass("active");
+      });
+    </script>
+
+  </body>
+</html>
+
 EOF
 }
 
 sub fail {
     my ($msg) = @_;
     print "Content-type: text/html\r\n\r\n";
-    doctype;
+    print "<!DOCTYPE html>\n";
     start 'html', xmlns => "http://www.w3.org/1999/xhtml";
     start 'head';
     tag 'meta', 'http-equiv' => "Content-Type",

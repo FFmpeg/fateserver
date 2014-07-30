@@ -1,6 +1,7 @@
 #! /usr/bin/perl
 #
 # Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
+# Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
 #
 # Permission to use, copy, modify, and distribute this software for any
 # purpose with or without fee is hereby granted, provided that the above
@@ -164,6 +165,7 @@ sub category {
 }
 
 print "Content-type: text/html\r\n";
+print "Access-Control-Allow-Origin: https://ffmpeg.org\r\n";
 
 if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
     print "Content-Encoding: gzip\r\n\r\n";
@@ -172,17 +174,7 @@ if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
     print "\r\n";
 }
 
-doctype;
-start 'html', xmlns => "http://www.w3.org/1999/xhtml";
-start 'head';
-tag 'meta', 'http-equiv' => "Content-Type",
-            'content'    => "text/html; charset=utf-8";
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '//ffmpeg.org/default.css';
-tag 'link', rel  => 'stylesheet',
-            type => 'text/css',
-            href => '/fate.css';
+head1;
 print "<title>FATE</title>\n";
 print <<EOF;
 <script type="text/javascript">
@@ -190,24 +182,19 @@ print <<EOF;
       var e = document.getElementById(id);
       if (e.style.display == 'table-row') {
           e.style.display = 'none';
-          arr.textContent = '\\u25b6'
+          arr.classList.remove("fa-caret-up");
+          arr.classList.add("fa-caret-down");
       } else {
           e.style.display = 'table-row';
-          arr.textContent = '\\u25bc'
+          arr.classList.add("fa-caret-up");
+          arr.classList.remove("fa-caret-down");
       }
   }
 </script>
 EOF
-end 'head';
-
-start 'body';
-start 'div', id => 'container';
-
-navbar;
-
-start 'div', id => 'body';
-
-h1 'FATE';
+head2;
+print "FATE\n";
+head3;
 
 if (@queries) {
     start 'p';
@@ -220,13 +207,34 @@ if (@queries) {
     end 'p';
 }
 
-start 'table', id => 'index', class => 'replist';
+start 'div', class => 'table-responsive';
+start 'table', id => 'index', class => 'replist table';
 start 'thead';
 start 'tr';
-start 'td', colspan => 10, id => 'failometer';
-span '&nbsp;', class => 'pass', style => "width: ${allpass}%" if $allpass;
-span '&nbsp;', class => 'warn', style => "width: ${warn}%"    if $warn;
-span '&nbsp;', class => 'fail', style => "width: ${allfail}%" if $allfail;
+start 'td', colspan => 8, id => 'failometer';
+start 'div', class => 'progress';
+if ($allpass) {
+    print <<EOF;
+<div class="progress-bar pass" role="progressbar" title="${allpass}% tests passed" aria-valuenow="${allpass}" aria-valuemin="0" aria-valuemax="100" style="width: ${allpass}%">
+  <span class="sr-only">${allpass}%}</span>
+</div>
+EOF
+}
+if ($warn) {
+    print <<EOF;
+<div class="progress-bar warn" role="progressbar" title="${warn}% tests failed" aria-valuenow="${warn}" aria-valuemin="0" aria-valuemax="100" style="width: ${warn}%">
+  <span class="sr-only">${warn}%</span>
+</div>
+EOF
+}
+if ($allfail) {
+    print <<EOF;
+<div class="progress-bar fail" role="progressbar" title="${allfail}% build failed" aria-valuenow="${allfail}" aria-valuemin="0" aria-valuemax="100" style="width: ${allfail}%">
+  <span class="sr-only">${allfail}%</span>
+</div>
+EOF
+}
+end 'div';
 end 'td';
 end 'tr';
 start 'tr';
@@ -236,8 +244,8 @@ start 'th'; lsort 'Arch',     'arch';          end 'th';
 start 'th'; lsort 'OS',       'os';            end 'th';
 start 'th'; lsort 'Compiler', 'cc';            end 'th';
 start 'th'; lsort 'Comment',  'comment';       end 'th';
-start 'th', colspan => 2; lsort 'Warnings', 'nwarn'; end 'th';
-start 'th', colspan => 2; lsort 'Tests', 'npass'; end 'th';
+start 'th'; lsort 'Warnings', 'nwarn';         end 'th';
+start 'th'; lsort 'Tests',    'npass';         end 'th';
 end 'tr';
 end 'thead';
 start 'tbody';
@@ -251,8 +259,8 @@ for my $rep (sort repcmp @reps) {
     my $rtext;
     my $rclass;
     my $log;
-    my $alert = ('rejoice', '', 'alert')[$$rep{alert} + 1];
-    my $walert = ('rejoice', '', 'alert')[$$rep{dwarn} + 1];
+    my $alert = ('pass', '', 'warn')[$$rep{alert} + 1];
+    my $walert = ('pass', '', 'warn')[$$rep{dwarn} + 1];
     (my $slotid = $$rep{slot}) =~ s/[^a-z0-9_-]/_/ig;
 
     if ($age < $recent_age) {
@@ -262,7 +270,7 @@ for my $rep (sort repcmp @reps) {
         $alert = '';
     }
 
-    start 'tr', class => "$ageclass $alert alt hilight";
+    start 'tr', class => "$ageclass $alert";
     start 'td';
     anchor $agestr, href => href slot => $$rep{slot};
     end 'td';
@@ -295,32 +303,38 @@ for my $rep (sort repcmp @reps) {
             }
         }
     }
-    start 'td', class => 'warnleft';
-    anchor $$rep{nwarn}, class => $walert,
-      href => href slot => $$rep{slot}, time => $$rep{date}, log => 'compile';
+    start 'td', class => "$walert";
+    start 'div', class => 'pull-left';
+    anchor $$rep{nwarn},
+        href => href slot => $$rep{slot}, time => $$rep{date}, log => 'compile';
     end;
-    start 'td', class => 'warnright';
-    anchor '±', class => $walert,
-      href => href slot => $$rep{slot}, time => $$rep{date},
+    start 'div', class => 'pull-right';
+    anchor '±',
+        href => href slot => $$rep{slot}, time => $$rep{date},
         log => "compile/$$rep{pdate}";
     end;
-    start 'td', class => "$rclass resleft";
+    end;
+    start 'td', class => "$rclass";
+    start 'div', class => 'pull-left';
     anchor $rtext, href => href slot => $$rep{slot}, time => $$rep{date};
-    end 'td';
-    start 'td', class => "$rclass resright";
+    end;
     if ($npass < $ntest or $log) {
-        span '&#9654;', class => 'toggle', onclick => "toggle('$slotid', this)";
+        start 'div', class => 'pull-right';
+        span '', class => 'toggle fa fa-caret-down', onclick => "toggle('$slotid', this)";
+        end;
     }
-    end 'td';
+    end;
     end 'tr';
     print "\n";
     if ($npass < $ntest && $ntest - $npass < 100) {
+        trowa { style => 'display: none' }, '';
+        print "\n";
         my $report = load_report $$rep{slot}, $$rep{date};
         my @fail = grep $$_{status} ne '0', @{$$report{recs}};
         my $lastpass = load_lastpass $$rep{slot};
 
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 10;
+        start 'td', colspan => 8;
         start 'table', class => 'minirep';
         start 'thead';
         start 'tr';
@@ -335,8 +349,8 @@ for my $rep (sort repcmp @reps) {
         start 'tbody';
         for (sort { $$a{name} cmp $$b{name} } @fail) {
             my $falert = $$rep{pdate} eq $$lastpass{$$_{name}}{date} ?
-              'alert' : '';
-            start 'tr', class => "alt hilight $falert";
+              'warn' : '';
+            start 'tr', class => "$falert";
             td $$_{name};
             td $$_{status}, class => 'errcode';
             end 'tr';
@@ -346,21 +360,18 @@ for my $rep (sort repcmp @reps) {
         end 'td';
         end 'tr';
         print "\n";
-        trowa { style => 'display: none' }, '';
     } elsif ($log) {
+        trowa { style => 'display: none' }, '';
         start 'tr', id => $slotid, class => 'slotfail';
-        start 'td', colspan => 10;
+        start 'td', colspan => 8;
         start 'pre', class => 'minilog';
         print encode_entities($log, '<>&"');
         end 'pre';
         end 'td';
         end 'tr';
-        trowa { style => 'display: none' }, '';
     }
 }
 end 'tbody';
 end 'table';
 end 'div';
-end 'div';
-end 'body';
-end 'html';
+footer;

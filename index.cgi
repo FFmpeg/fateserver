@@ -216,7 +216,7 @@ start 'div', class => 'progress';
 if ($allpass) {
     print <<EOF;
 <div class="progress-bar pass" role="progressbar" title="${allpass}% tests passed" aria-valuenow="${allpass}" aria-valuemin="0" aria-valuemax="100" style="width: ${allpass}%">
-  <span class="sr-only">${allpass}%}</span>
+  <span class="sr-only">${allpass}%</span>
 </div>
 EOF
 }

@@ -32,9 +32,16 @@ cd $reptmp
 tar xzk
 
 header=$(head -n1 report)
-date=$(expr "$header" : 'fate:0:\([0-9]*\):')
-slot=$(expr "$header" : 'fate:0:[0-9]*:\([A-Za-z0-9_.-]*\):')
-rev=$(expr "$header" : "fate:0:$date:$slot:\([A-Za-z0-9_.-]*\):")
+# Can't use expr on this one because $version might be 0
+version=$(echo "$header" | sed "s/^fate:\([0-9]*\):.*/\1/")
+date=$(expr "$header" : "fate:$version:\([0-9]*\):")
+slot=$(expr "$header" : "fate:$version:$date:\([A-Za-z0-9_.-]*\):")
+rev=$(expr "$header" : "fate:$version:$date:$slot:\([A-Za-z0-9_.-]*\):")
+branch=master
+if [ $version -eq 1 ]; then
+    branch=$(expr "$header" : "fate:$version:$date:$slot:$rev:[0-9]*:[ A-Za-z0-9_.-]*:\([A-Za-z0-9_.-\/]*\):")
+    branch=$(echo "$branch" | sed 's,^release/,v,')
+fi
 
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 

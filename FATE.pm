@@ -47,7 +47,7 @@ our $gitweb = "http://git.videolan.org/?p=ffmpeg.git";
 sub split_header {
     my @hdr = split /:/, $_[0];
     $hdr[0] eq 'fate' or return undef;
-    return {
+    my $parsed = {
         version => $hdr[1],
         date    => $hdr[2],
         slot    => $hdr[3],
@@ -56,6 +56,11 @@ sub split_header {
         errstr  => $hdr[6],
         comment => $hdr[7],
     };
+    if ($hdr[1] eq '1') {
+      $parsed->{'comment'} = $hdr[8];
+      $parsed->{'branch'}  = $hdr[7];
+    }
+    return $parsed;
 }
 
 sub split_config {
@@ -132,7 +137,7 @@ sub load_report {
 
     my $hdr  = split_header scalar <R> or return;
     my $conf = split_config scalar <R> or return;
-    $$hdr{version} eq '0'              or return undef;
+    $$hdr{version} eq '0' or $$hdr{version} eq '1' or return undef;
 
     while (<R>) {
         my $rec = split_rec $_;

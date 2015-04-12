@@ -59,6 +59,8 @@ sub split_header {
     if ($hdr[1] eq '1') {
       $parsed->{'comment'} = $hdr[8];
       $parsed->{'branch'}  = $hdr[7];
+    } elsif ($hdr[1] ne '0') {
+      return undef;
     }
     return $parsed;
 }

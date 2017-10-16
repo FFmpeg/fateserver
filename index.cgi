@@ -32,6 +32,8 @@ use URI::Escape;
 my @queries = split(/\/\//, uri_unescape param 'query') if (param 'query');
 
 my $sort = param('sort');
+$sort =~ s/[^A-Za-z0-9 ]*//g;
+param('sort', $sort);
 $sort    = $sort eq 'arch' ? 'subarch': $sort;
 
 (my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;

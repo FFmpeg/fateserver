@@ -22,7 +22,11 @@ use FATE;
 
 my $req_slot = param 'slot';
 my $req_time = param 'time';
+$req_slot =~ s/[^-._A-Za-z0-9 ]*//g;
+$req_time =~ s/[^0-9]*//g;
 my ($req_log, $req_diff) = param('log') =~ m!([^/]+)(?:/([^/]+))?!;
+$req_log  =~ s/[^a-z]*//g;
+$req_diff =~ s/[^0-9]*//g;
 
 my $repdir = "$fatedir/$req_slot/$req_time";
 my $log = "$repdir/$req_log.log.gz";

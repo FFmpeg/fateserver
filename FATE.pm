@@ -373,6 +373,7 @@ sub head2 {
           <li><a href="#">Developers</a>
             <ul>
               <li><a href="https://ffmpeg.org/download.html#get-sources">Source Code</a>
+              <li><a href="https://ffmpeg.org/developer.html#Contributing">Contribute</a></li>
               <li><a href="/">FATE</a></li>
               <li><a href="http://coverage.ffmpeg.org">Code Coverage</a></li>
             </ul>

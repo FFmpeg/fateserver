@@ -43,6 +43,12 @@ if [ $version -eq 1 ]; then
     branch=$(echo "$branch" | sed 's,^release/,v,')
 fi
 
+test -e "$FATEDIR/branches" || touch "$FATEDIR/branches"
+grep -q "^$branch$" "$FATEDIR/branches" || \
+    [ "$branch" = 'master' ] || \
+    (echo "$branch" >>"$FATEDIR/branches" && \
+     echo "Setting up new branch $branch" >&2)
+
 test -n "$date" && test -n "$slot" || die "Invalid report header"
 
 slotdir=$FATEDIR/$slot
@@ -52,6 +58,7 @@ if [ -d "$slotdir" ]; then
     owner=$(cat "$slotdir/owner")
     test "$owner" = "$FATE_USER" || die "Slot $slot owned by somebody else"
 else
+    echo "$slot" >> /home/fate/newslots
     mkdir "$slotdir"
     echo "$FATE_USER" >"$slotdir/owner"
 fi
@@ -75,7 +82,11 @@ exec <&- >&-
 
 upass(){
     read pname pdate prev || return 0
+    # Because we `sort`ed the input before passing it to upass, same tests
+    # always in couplets in the order of new to old.
     while read lname ldate lrev; do
+        # If the second line describes the same test, discard it because it's
+        # the old result.
         test "$lname" != "$pname" && echo "$pname:$pdate:$prev"
         pname=$lname
         pdate=$ldate
@@ -94,7 +105,7 @@ fi
 
 unset IFS
 
-nwarn=$(grep -Eci '\<warning\>' compile.log) || true
+nwarn=$(grep -Eci '\<warning\>' compile.log) || nwarn=0
 
 echo "stats:$ntest:$npass:$nwarn" >>summary
 
@@ -108,3 +119,6 @@ rm -f $slotdir/previous
 test -e $slotdir/latest && mv $slotdir/latest $slotdir/previous
 ln -s $date $slotdir/latest
 cp lastpass ${lastpass}.new && mv ${lastpass}.new $lastpass
+
+# /home/fate/.nvm/versions/node/v4.3.1/bin/node /home/fate/mongo-experiments/process/migrate.js "$slot" "$date" "$date"
+# /home/fate/.nvm/versions/node/v4.3.1/bin/node /home/fate/mongo-experiments/process/link2.js "$slot"

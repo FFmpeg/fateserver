@@ -52,12 +52,6 @@ my $ntest = $npass + $nfail;
 my $rep = load_summary $req_slot, $req_time;
 my $lastpass = load_lastpass $req_slot;
 
-my $owner;
-if (open O, "$slotdir/owner") {
-    chomp($owner = <O>);
-    close O;
-}
-
 # main text
 
 print "Content-type: text/html\r\n";
@@ -100,7 +94,7 @@ trow 'Architecture',  $$conf{arch};
 trow 'Variant',       $$conf{subarch};
 trow 'CPU',           $$conf{cpu};
 trow 'OS',            $$conf{os};
-trow 'Owner',         $owner if $owner;
+trow 'Owner',         $$rep{owner};
 trow 'Compiler',      $$conf{cc};
 trow 'Configuration', '<code>' . $$conf{config} . '</code>';
 trow 'Comment',       $$hdr{comment};

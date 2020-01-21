@@ -99,6 +99,18 @@ sub split_rec {
     };
 }
 
+sub owner {
+    my ($slot) = @_;
+    my $owner;
+
+    if (open O, "$fatedir/$slot/owner") {
+        chomp($owner = <O>);
+        close O;
+    }
+
+    return $owner;
+}
+
 sub load_summary {
     my ($slot, $date) = @_;
     my $repdir = "$fatedir/$slot/$date";
@@ -109,7 +121,7 @@ sub load_summary {
         my $conf = split_config scalar <S> or return;
         my $st   = split_stats  scalar <S> or return;
         close S;
-        return { %$hdr, %$conf, %$st };
+        return { %$hdr, %$conf, %$st, owner => owner $slot };
     }
 
     return if not -f "$repdir/report.xz";

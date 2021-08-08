@@ -33,7 +33,7 @@ cgi_path_is_trustworthy;
 # @queries contains an array of 'type:value' strings.
 # Every member of @queries can be further parsed with another simple
 # split(/:/, $this_query, 2);
-my @queries = split(/\/\//, uri_unescape param 'query') if (param 'query');
+my @queries = split(/\/\//, uri_unescape scalar param 'query') if (param 'query');
 
 my $sort = safeparam_sort;
 $sort = "subarch" if defined($sort) && $sort eq "arch";

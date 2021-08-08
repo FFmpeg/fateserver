@@ -20,13 +20,12 @@ use warnings;
 use lib "/var/www/fateweb";
 
 use POSIX qw/asctime/;
-use CGI qw/param/;
 use HTML::Entities;
 use MIME::Base64;
 use FATE;
 
-my $req_slot = param 'slot';
-my $req_time = param 'time';
+my $req_slot = safeparam_slot;
+my $req_time = safeparam_time;
 
 my $slotdir = "$fatedir/$req_slot";
 my $repdir = "$slotdir/$req_time";

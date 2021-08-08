@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /usr/bin/perl -T
 #
 # Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
 #
@@ -20,6 +20,8 @@ use warnings;
 use lib "/var/www/fateweb";
 
 use FATE;
+
+cgi_path_is_trustworthy;
 
 my $req_slot = safeparam_slot;
 my $req_time = safeparam_time;

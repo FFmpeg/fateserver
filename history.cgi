@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /usr/bin/perl -T
 #
 # Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
 #
@@ -22,6 +22,8 @@ use lib "/var/www/fateweb";
 use FATE;
 use Time::Zone;
 use HTML::Entities;
+
+cgi_path_is_trustworthy;
 
 my $slot = safeparam_slot;
 my $slotdir = "$fatedir/$slot";

@@ -32,6 +32,7 @@ BEGIN {
                   head1 head2 head3 footer href
                   fail
                   ready_for_gzip end_headers_and_compress
+                  cgi_path_is_trustworthy
                   safeparam safeparam_opt
                   safeparam_sort safeparam_slot safeparam_time safeparam_log
                   $fatedir $recent_age $ancient_age $hidden_age $gitweb/;
@@ -444,6 +445,10 @@ sub fail {
     end 'body';
     end 'html';
     exit 1;
+}
+
+sub cgi_path_is_trustworthy() {
+    ($ENV{PATH}) = $ENV{PATH} =~ /(.*)/s;
 }
 
 sub ready_for_gzip() {

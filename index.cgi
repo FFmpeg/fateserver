@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /usr/bin/perl -T
 #
 # Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
 # Copyright (c) 2014 Tiancheng "Timothy" Gu <timothygu99@gmail.com>
@@ -25,6 +25,8 @@ use HTML::Entities;
 use FATE;
 use Time::Zone;
 use URI::Escape;
+
+cgi_path_is_trustworthy;
 
 # Format for /?query= : /?query=type:value//type:value// (URI encoded).
 # Trailing // does not matter (i.e. may be added).

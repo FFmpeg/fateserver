@@ -24,6 +24,8 @@ use HTML::Entities;
 use MIME::Base64;
 use FATE;
 
+cgi_path_is_trustworthy;
+
 my $req_slot = safeparam_slot;
 my $req_time = safeparam_time;
 

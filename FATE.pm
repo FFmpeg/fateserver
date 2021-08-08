@@ -19,6 +19,7 @@ use strict;
 use warnings;
 
 use POSIX qw/asctime mktime/;
+use CGI ();
 
 BEGIN {
     use Exporter;
@@ -30,6 +31,8 @@ BEGIN {
                   start end tag h1 span trow trowa trowh th td anchor
                   head1 head2 head3 footer href
                   fail
+                  safeparam safeparam_opt
+                  safeparam_sort safeparam_slot safeparam_time safeparam_log
                   $fatedir $recent_age $ancient_age $hidden_age $gitweb/;
 }
 
@@ -440,6 +443,39 @@ sub fail {
     end 'body';
     end 'html';
     exit 1;
+}
+
+# safeparam qr/.../, $name
+# Validate parameter $name with a regular expression.
+sub safeparam_opt($$) {
+    my ($re, $n) = @_;
+    my $v = CGI::param($n);
+    return undef if !defined $v;
+    ($v) = $v =~ /^($re)\z/ or fail "Invalid $n value.";
+    return $v;
+}
+
+sub safeparam($$) {
+    my ($re, $n) = @_;
+    my $v = safeparam_opt $re, $n;
+    fail "No $n parameter." unless defined $v;
+    return $v;
+}
+
+sub safeparam_sort() {
+    return safeparam_opt qr/[a-z]{1,10}(?:\/\/[a-z]{1,10})*/, 'sort';
+}
+
+sub safeparam_slot() {
+    return safeparam qr/[A-Za-z0-9_\-.]{1,80}/, 'slot';
+}
+
+sub safeparam_time() {
+    return safeparam qr/[0-9]{14}/, 'time';
+}
+
+sub safeparam_log() {
+    return safeparam qr/[a-z]{1,10}(?:\/[0-9]{14})?/, 'log';
 }
 
 1;

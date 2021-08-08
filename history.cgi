@@ -17,6 +17,8 @@
 use strict;
 use warnings;
 
+use lib "/var/www/fateweb";
+
 use CGI qw/param/;
 use FATE;
 use Time::Zone;

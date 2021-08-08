@@ -18,6 +18,8 @@
 use strict;
 use warnings;
 
+use lib "/var/www/fateweb";
+
 use CGI qw/param/;
 use HTML::Entities;
 use FATE;

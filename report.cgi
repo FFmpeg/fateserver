@@ -17,6 +17,8 @@
 use strict;
 use warnings;
 
+use lib "/var/www/fateweb";
+
 use POSIX qw/asctime/;
 use CGI qw/param/;
 use HTML::Entities;

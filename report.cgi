@@ -58,12 +58,7 @@ my $lastpass = load_lastpass $req_slot;
 
 print "Content-type: text/html\r\n";
 
-if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
-    print "Content-Encoding: gzip\r\n\r\n";
-    open STDOUT, '|-', 'gzip';
-} else {
-    print "\r\n";
-}
+end_headers_and_compress;
 
 head1;
 print "<title>FATE: $$hdr{slot} $$hdr{rev}</title>\n";

@@ -169,12 +169,7 @@ sub category {
 print "Content-type: text/html\r\n";
 print "Access-Control-Allow-Origin: https://ffmpeg.org\r\n";
 
-if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
-    print "Content-Encoding: gzip\r\n\r\n";
-    open STDOUT, '|-', 'gzip';
-} else {
-    print "\r\n";
-}
+end_headers_and_compress;
 
 head1;
 print "<title>FATE</title>\n";

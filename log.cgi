@@ -43,16 +43,14 @@ if (! -r $log) {
 
 if ($req_diff) {
     my $dlog = "$fatedir/$req_slot/$req_diff/$req_log.log.gz";
-    print "\r\n";
+    end_headers_and_compress;
     exec 'zdiff', '-u', $dlog, $log;
 }
 
 my $cat = 'zcat';
 
-if ($ENV{HTTP_ACCEPT_ENCODING} =~ /gzip/) {
-    print "Content-Encoding: gzip\r\n";
+if (ready_for_gzip) {
     $cat = 'cat';
 }
 
-print "\r\n";
 exec $cat, $log;

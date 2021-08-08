@@ -35,7 +35,9 @@ close D;
 
 @reps or fail "No data in $fatedir";
 
-print "Content-type: text/html\r\n\r\n";
+print "Content-type: text/html\r\n";
+
+end_headers_and_compress;
 
 head1;
 print "<title>FATE: $slot</title>\n";

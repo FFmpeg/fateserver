@@ -31,6 +31,7 @@ BEGIN {
                   start end tag h1 span trow trowa trowh th td anchor
                   head1 head2 head3 footer href
                   fail
+                  ready_for_gzip end_headers_and_compress
                   safeparam safeparam_opt
                   safeparam_sort safeparam_slot safeparam_time safeparam_log
                   $fatedir $recent_age $ancient_age $hidden_age $gitweb/;
@@ -443,6 +444,23 @@ sub fail {
     end 'body';
     end 'html';
     exit 1;
+}
+
+sub ready_for_gzip() {
+    my $ae = $ENV{HTTP_ACCEPT_ENCODING};
+    if (defined($ae) && $ae =~ /\bgzip\b/) {
+        print "Content-Encoding: gzip\r\n\r\n";
+        return 1;
+    } else {
+        print "\r\n";
+        return 0;
+    }
+}
+
+sub end_headers_and_compress() {
+    if (ready_for_gzip) {
+        open STDOUT, '|-', 'gzip';
+    }
 }
 
 # safeparam qr/.../, $name

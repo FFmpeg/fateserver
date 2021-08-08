@@ -33,10 +33,8 @@ use URI::Escape;
 # split(/:/, $this_query, 2);
 my @queries = split(/\/\//, uri_unescape param 'query') if (param 'query');
 
-my $sort = param('sort');
-$sort =~ s/[^A-Za-z0-9 ]*//g;
-param('sort', $sort);
-$sort    = $sort eq 'arch' ? 'subarch': $sort;
+my $sort = safeparam_sort;
+$sort = "subarch" if defined($sort) && $sort eq "arch";
 
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;

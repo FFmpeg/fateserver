@@ -38,8 +38,6 @@ $sort =~ s/[^A-Za-z0-9 ]*//g;
 param('sort', $sort);
 $sort    = $sort eq 'arch' ? 'subarch': $sort;
 
-(my $uri = $ENV{REQUEST_URI}) =~ s/\?.*//;
-
 opendir D, $fatedir or fail 'Server error: $fatedir not found';
 my @slots = grep /^[^.]/, readdir D;
 closedir D;
@@ -77,7 +75,7 @@ for my $slot (@slots) {
 }
 
 @reps or fail @queries ? 'No items matching search criteria. ' .
-                         "<a href=\"$uri\">Clear all search criteria.</a>" :
+                         "<a href=\"\">Clear all search criteria.</a>" :
                          'No data in $fatedir.';
 
 $allpass = 100 * $allpass / @reps;
@@ -133,7 +131,7 @@ sub lsort {
     }
 
     $key = $newkey if $newkey ne '';
-    anchor $text, href => "$uri?${params}sort=$key";
+    anchor $text, href => "?${params}sort=$key";
 }
 
 sub category {
@@ -164,7 +162,7 @@ sub category {
     $head_printed = 1;                 # for the sake of completeness
 
     start 'td';
-    anchor $$rep{$category}, href => "$uri?$params";
+    anchor $$rep{$category}, href => "?$params";
     end 'td';
 }
 
@@ -207,7 +205,7 @@ if (@queries) {
         my ($type, $text) = split(/:/, $this_query, 2);
         print "$type: $text; ";
     }
-    anchor 'clear all.', href => "$uri";
+    anchor 'clear all.', href => "";
     end 'p';
 }
 

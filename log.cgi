@@ -19,16 +19,13 @@ use warnings;
 
 use lib "/var/www/fateweb";
 
-use CGI qw/param/;
 use FATE;
 
-my $req_slot = param 'slot';
-my $req_time = param 'time';
-$req_slot =~ s/[^-._A-Za-z0-9 ]*//g;
-$req_time =~ s/[^0-9]*//g;
-my ($req_log, $req_diff) = param('log') =~ m!([^/]+)(?:/([^/]+))?!;
-$req_log  =~ s/[^a-z]*//g;
-$req_diff =~ s/[^0-9]*//g;
+my $req_slot = safeparam_slot;
+my $req_time = safeparam_time;
+my $req_log = safeparam_log;
+my $req_diff;
+$req_diff = $1 if $req_log =~ s/\/(.*)//;
 
 my $repdir = "$fatedir/$req_slot/$req_time";
 my $log = "$repdir/$req_log.log.gz";

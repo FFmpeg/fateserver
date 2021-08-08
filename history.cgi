@@ -19,12 +19,11 @@ use warnings;
 
 use lib "/var/www/fateweb";
 
-use CGI qw/param/;
 use FATE;
 use Time::Zone;
 use HTML::Entities;
 
-my $slot = param 'slot';
+my $slot = safeparam_slot;
 my $slotdir = "$fatedir/$slot";
 
 my $slot_escaped = encode_entities $slot;

@@ -147,6 +147,8 @@ sub load_summary {
 
 sub load_report {
     my ($slot, $date) = @_;
+    ($slot) = $slot =~ /^([A-Za-z0-9_\-.]{1,80})\z/ or exit 1;
+    ($date) = $date =~ /^([0-9]{1,80})\z/ or exit 1;
     my $report = "$fatedir/$slot/$date/report.xz";
     my @recs;
 

@@ -47,6 +47,7 @@ my $allpass = 0;
 my $allfail = 0;
 
 for my $slot (@slots) {
+    ($slot) = $slot =~ /^([A-Za-z0-9_\-.]{1,80})\z/ or next;
     next if -e "$fatedir/$slot/hidden";
     my $rep = load_summary $slot, 'latest' or next;
     next if time - parse_date($$rep{date}) > $hidden_age;

@@ -1,4 +1,4 @@
-#! /usr/bin/perl
+#! /usr/bin/perl -T
 #
 # Copyright (c) 2011 Mans Rullgard <mans@mansr.com>
 #

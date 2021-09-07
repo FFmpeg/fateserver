@@ -52,6 +52,8 @@ our $gitweb = "http://git.videolan.org/?p=ffmpeg.git";
 sub split_header {
     my @hdr = split /:/, $_[0];
     $hdr[0] eq 'fate' or return undef;
+    ($hdr[2]) = $hdr[2] =~ /^([0-9]{1,80})\z/ or return undef;
+    ($hdr[3]) = $hdr[3] =~ /^([A-Za-z0-9_\-.]{1,80})\z/ or return undef;
     my $parsed = {
         version => $hdr[1],
         date    => $hdr[2],
@@ -147,8 +149,6 @@ sub load_summary {
 
 sub load_report {
     my ($slot, $date) = @_;
-    ($slot) = $slot =~ /^([A-Za-z0-9_\-.]{1,80})\z/ or exit 1;
-    ($date) = $date =~ /^([0-9]{1,80})\z/ or exit 1;
     my $report = "$fatedir/$slot/$date/report.xz";
     my @recs;
 

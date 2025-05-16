@@ -286,7 +286,7 @@ for my $rep (sort repcmp @reps) {
     td $$rep{comment}, class => 'comment';
     if ($npass) {
         $rtext  = "$npass / $ntest";
-        $rclass = $npass==$ntest? 'pass' : $npass? 'warn' : 'fail';
+        $rclass = $$rep{status}==0? 'pass' : $npass? 'warn' : 'fail';
     } elsif (!$ntest and !$$rep{status}) {
         $rtext  = "build only";
         $rclass = $$rep{status}? 'fail' : 'pass';

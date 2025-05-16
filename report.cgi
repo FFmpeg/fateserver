@@ -183,7 +183,11 @@ if ($nfail) {
     }
     end 'tbody';
 } elsif ($ntest) {
-    start 'tr', class => 'pass'; th 'All tests successful', colspan => 3; end;
+    if ($$hdr{status}) {
+        start 'tr', class => 'fail'; th 'Failure building tests', colspan => 3; end;
+    } else {
+        start 'tr', class => 'pass'; th 'All tests successful', colspan => 3; end;
+    }
 } else {
     my $class = $$hdr{status}? 'fail' : 'pass';
     start 'tr', class => $class; th 'No tests were run',    colspan => 3; end;

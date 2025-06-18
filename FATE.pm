@@ -43,7 +43,7 @@ our $recent_age  = 3600;
 our $ancient_age = 3 * 86400;
 our $hidden_age  = 30 * 86400;
 our $pretty_links = 0;
-our $gitweb = "http://git.videolan.org/?p=ffmpeg.git";
+our $gitweb = "https://git.ffmpeg.org/?p=ffmpeg.git";
 
 #require "$ENV{FATEWEB_CONFIG}";
 
